@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+.vercel/
+tsconfig.tsbuildinfo
+vore_next/scripts/backups/
+
+# Expo / React Native
+.expo/
+.tmp-export/
+.tmp_write_test.txt
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+/ios
+/android
+
+# env files (secrets)
+.env
+.env.local
+.env*.local
+.env.production
+
+# logs
+*.log
+*.err
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# large archives (kept on disk, not versioned)
+vore_mobile_native.zip

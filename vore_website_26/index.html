@@ -1,0 +1,98 @@
+﻿<!doctype html>
+<html lang="pt" translate="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="google" content="notranslate" />
+  <title>Vore Website 26</title>
+  <link rel="stylesheet" href="./css/styles.css?v=20260406-193" />
+</head>
+<body>
+  <section id="entryGate" class="entry-gate"></section>
+
+  <div id="appShell" class="app-shell">
+    <header class="topbar">
+      <div class="brand notranslate" translate="no">Vore</div>
+      <nav id="mainNav" class="main-nav notranslate" translate="no">
+        <button data-tab="home" class="active">Home</button>
+        <button data-tab="explore">Explorar</button>
+        <button data-tab="notifications">Notificações</button>
+        <button data-tab="profile">Perfil</button>
+        <button data-tab="edit">Editar Perfil</button>
+        <button data-tab="settings">Definições</button>
+      </nav>
+    </header>
+
+    <div id="editNavHandle" class="edit-nav-handle" aria-hidden="true">
+      <button type="button" class="edit-nav-tab" data-edit-nav-toggle="1" aria-label="Abrir navegacao" title="Abrir navegacao">
+        <span class="edit-nav-tab-arrow" aria-hidden="true">&#9654;</span>
+      </button>
+    </div>
+
+    <main class="layout">
+      <section id="home" class="screen active">
+        <div id="homeInsights" class="chips home-insights"></div>
+        <div id="homeFilterChips" class="chips chips-scroll notranslate" translate="no"></div>
+        <h3 class="section-title">Sugestões</h3>
+        <div id="homeSuggested" class="suggested-strip"></div>
+        <h3 id="homeProfilesTitle" class="section-title">Destaques</h3>
+        <div id="homeCards" class="grid"></div>
+      </section>
+
+      <section id="explore" class="screen">
+        <div class="explore-search-row">
+          <div class="explore-search-box">
+            <span class="explore-search-icon">&#8981;</span>
+            <input id="searchInput" class="input explore-search-input" placeholder="Pesquisar perfis..." />
+            <button id="exploreOpenFilters" class="explore-search-filter-btn" type="button" aria-label="Filtros avançados">&#9881;</button>
+          </div>
+        </div>
+        <div id="exploreSortRow" class="chips chips-scroll"></div>
+        <div class="explore-meta-row">
+          <span id="exploreMetaText" class="muted">0 resultados</span>
+          <span id="exploreTrendText" class="muted"></span>
+        </div>
+        <div id="exploreActiveFilters" class="explore-active-filters"></div>
+        <div id="exploreCards" class="grid"></div>
+        <div id="explorePager" class="explore-pager"></div>
+        <div id="exploreSentinel" class="explore-sentinel"></div>
+      </section>
+
+      <section id="profile" class="screen">
+        <div id="profileHead"></div>
+        <div id="profileTabs" class="chips"></div>
+        <div id="profileSubTabs" class="chips"></div>
+        <div id="profileContent" class="panel"></div>
+      </section>
+
+      <section id="notifications" class="screen">
+        <h2>Notificações</h2>
+        <div id="notificationsFilters" class="chips"></div>
+        <div id="notificationsList" class="panel">Sem notificações.</div>
+      </section>
+
+      <section id="edit" class="screen">
+        <div id="editPlaceholder" class="panel">A carregar editor...</div>
+      </section>
+
+      <section id="settings" class="screen">
+        <h2>Definições</h2>
+        <div id="settingsInfo" class="panel">A carregar definições...</div>
+      </section>
+    </main>
+
+    <aside id="desktopRail" class="desktop-rail" aria-label="Destaques desktop"></aside>
+
+  </div>
+
+  <script type="module" src="./js/app.js?v=20260406-193"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
