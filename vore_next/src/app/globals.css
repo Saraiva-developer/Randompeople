@@ -1,9 +1,9 @@
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --accent-light: #a5b4fc;
+  --primary: #1f2937;
+  --primary-dark: #0f172a;
+  --accent-light: #cbd5e1;
   --accent-green: #22c55e;
-  --bg: #f7f8fa;
+  --bg: #e2e5ea;
   --card: #fff;
   --line: #d9e0ea;
   --text: #0f172a;
@@ -15,8 +15,8 @@
   --surface-strong: rgba(15, 23, 42, 0.94);
   --border: rgba(148, 163, 184, 0.18);
   --foreground: #f8fafc;
-  --accent: #6366f1;
-  --accent-soft: rgba(99, 102, 241, 0.16);
+  --accent: #1f2937;
+  --accent-soft: rgba(15, 23, 42, 0.08);
   --success: #22c55e;
   --shadow: 0 30px 80px rgba(2, 6, 23, 0.45);
   --radius: 24px;
@@ -81,7 +81,7 @@ a {
   gap: 12px;
   align-items: center;
   padding: 12px 16px;
-  background: #fff;
+  background: transparent;
   border-bottom: 1px solid var(--line);
 }
 
@@ -137,11 +137,11 @@ a {
 
 .screen {
   display: block;
-  background: #fff;
-  border: 1px solid #dbe3ef;
-  border-radius: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   padding: 16px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: none;
 }
 
 .grid {
@@ -994,7 +994,7 @@ button.active {
   .layout {
     margin-left: 146px;
     margin-right: 216px;
-    padding: 20px 24px 92px;
+    padding: 20px 4px 92px;
     max-width: none;
     min-height: 100vh;
   }
@@ -1008,7 +1008,7 @@ button.active {
     width: 216px;
     z-index: 28;
     padding: 14px 10px 12px;
-    background: #fff;
+    background: transparent;
     border-left: 1px solid var(--line);
     overflow-y: auto;
   }
@@ -1152,9 +1152,9 @@ button.active {
   width: fit-content;
   padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  border: 1px solid var(--line);
   background: var(--accent-soft);
-  color: #fed7aa;
+  color: var(--text);
   font-size: 0.84rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1266,13 +1266,13 @@ button.active {
 
 .primary-button {
   background: var(--accent);
-  color: #1c0d04;
+  color: #fff;
 }
 
 .secondary-button {
   background: transparent;
-  color: var(--foreground);
-  border-color: var(--border);
+  color: var(--text);
+  border-color: var(--line);
 }
 
 .primary-button:hover,
@@ -1283,8 +1283,8 @@ button.active {
 .pill {
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(148, 163, 184, 0.12);
-  color: #e2e8f0;
+  background: #f1f5f9;
+  color: var(--text);
   font-size: 0.92rem;
 }
 
@@ -1304,10 +1304,10 @@ button.active {
 .auth-card {
   width: min(540px, 100%);
   padding: 32px;
-  border-radius: 28px;
-  border: 1px solid var(--border);
-  background: linear-gradient(160deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.78));
-  box-shadow: var(--shadow);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 .auth-card-wide {
@@ -1316,7 +1316,7 @@ button.active {
 
 .auth-kicker {
   margin: 0 0 10px;
-  color: #fdba74;
+  color: var(--muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -1324,6 +1324,7 @@ button.active {
 
 .auth-title {
   margin: 0;
+  color: var(--text);
   font-size: clamp(2rem, 5vw, 3.4rem);
   line-height: 0.96;
 }
@@ -1337,10 +1338,10 @@ button.active {
 .auth-message {
   margin: 18px 0 0;
   padding: 14px 16px;
-  border: 1px solid rgba(249, 115, 22, 0.28);
-  border-radius: 16px;
-  background: rgba(249, 115, 22, 0.12);
-  color: #ffedd5;
+  border: 1px solid #f3d0d0;
+  border-radius: 12px;
+  background: #fdf2f2;
+  color: #7a2222;
 }
 
 .auth-form {
@@ -1356,17 +1357,17 @@ button.active {
 
 .field span {
   font-size: 0.95rem;
-  color: #dbeafe;
+  color: var(--text);
 }
 
 .field input,
 .field select,
 .field-textarea {
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(15, 23, 42, 0.9);
-  color: var(--foreground);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
   font: inherit;
 }
 
@@ -1465,8 +1466,8 @@ button.active {
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  background: rgba(249, 115, 22, 0.18);
-  color: #fed7aa;
+  background: #f1f5f9;
+  color: var(--text);
   font-size: 12px;
   font-weight: 800;
 }
@@ -1792,9 +1793,7 @@ button.active {
 }
 
 .legacy-profile-cover-placeholder {
-  background:
-    linear-gradient(135deg, rgba(249, 115, 22, 0.24), rgba(14, 165, 233, 0.2)),
-    linear-gradient(180deg, #1e293b, #0f172a);
+  background: linear-gradient(180deg, #334155, #0f172a);
 }
 
 .legacy-profile-head {
@@ -1924,15 +1923,15 @@ button.active {
 
 .legacy-profile-tabs a,
 .legacy-profile-subtabs a {
-  background: rgba(255, 255, 255, 0.05);
-  color: #cbd5e1;
+  background: #f1f5f9;
+  color: var(--text);
 }
 
 .legacy-profile-tabs a.active,
 .legacy-profile-subtabs a.active {
-  background: #f97316;
-  color: #1c0d04;
-  border-color: #f97316;
+  background: var(--primary-dark);
+  color: #fff;
+  border-color: var(--primary-dark);
   font-weight: 700;
 }
 
@@ -2068,8 +2067,8 @@ button.active {
   width: fit-content;
   padding: 5px 10px;
   border-radius: 999px;
-  background: rgba(249, 115, 22, 0.18);
-  color: #fdba74;
+  background: #f1f5f9;
+  color: var(--text);
   font-weight: 700;
 }
 
@@ -2079,7 +2078,7 @@ button.active {
 }
 
 .auth-switch a {
-  color: #fdba74;
+  color: var(--primary-dark);
 }
 
 @media (max-width: 720px) {
@@ -2162,12 +2161,12 @@ button.active,
   background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
   border-color: var(--primary-dark) !important;
   color: #fff !important;
-  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.18);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
 }
 
 .legacy-profile-social-btn.is-empty {
-  background: #eef2ff !important;
-  border-color: #c7d2fe !important;
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
   color: var(--primary-dark) !important;
   box-shadow: none;
 }
@@ -2175,8 +2174,8 @@ button.active,
 .legacy-profile-pill,
 .legacy-profile-tab.active,
 .card-badge-verif {
-  border-color: #c7d2fe !important;
-  background: #eef2ff !important;
+  border-color: #e2e8f0 !important;
+  background: #f1f5f9 !important;
   color: var(--primary-dark) !important;
 }
 
@@ -2197,7 +2196,7 @@ button.active,
   background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
   border-color: var(--primary-dark) !important;
   color: #fff !important;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2) !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2) !important;
 }
 
 .nav-dot,
@@ -2212,7 +2211,7 @@ button.active,
 .desktop-rail-badge-promo,
 .profile-inline-badge-promo,
 .card-badge-promo {
-  background: #eef2ff !important;
-  border-color: #c7d2fe !important;
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
   color: var(--primary-dark) !important;
 }

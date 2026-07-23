@@ -189,7 +189,7 @@ export function SettingsClient({
                   <span className="settings-row-hint">Nome do negocio/perfil</span>
                 </span>
               </div>
-              <SettingsRow label="Credenciais de acesso" hint={account.email} href="/dashboard" />
+              <SettingsRow label="Credenciais de acesso" hint={account.email} />
               <SettingsRow label="Editar perfil" hint="Abrir edicao completa" href="/edit-profile" />
               <SettingsToggle
                 label="Perfil ativo"
@@ -226,7 +226,7 @@ export function SettingsClient({
         <div className="settings-section">
           <h4>Conta pessoal</h4>
           <div className="settings-card">
-            <SettingsRow label="Credenciais de acesso" hint={account.email} href="/dashboard" />
+            <SettingsRow label="Credenciais de acesso" hint={account.email} />
             <SettingsRow label="Abrir perfil pessoal" hint="Ir para o perfil" href="/profile" />
           </div>
         </div>

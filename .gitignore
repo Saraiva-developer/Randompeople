@@ -37,3 +37,6 @@ Thumbs.db
 
 # large archives (kept on disk, not versioned)
 vore_mobile_native.zip
+
+# machine-local dev certs (not portable across machines)
+vore_next/.certs/

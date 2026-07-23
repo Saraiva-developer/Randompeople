@@ -3,14 +3,14 @@
 .edit-history-btn{width:34px;min-width:34px;height:34px;padding:0;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-size:16px;line-height:1}
 .edit-save-status{margin:0;font-size:12px}
 .edit-tab-manager-item.is-dragging{opacity:.6}
-.edit-tab-manager-item.is-drop-target{border-color:var(--primary,#6366f1);background:#eef2ff}
+.edit-tab-manager-item.is-drop-target{border-color:var(--primary,#1f2937);background:#f1f5f9}
 .edit-drag-handle{display:inline-flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;line-height:1;letter-spacing:-1px;user-select:none}
 .edit-tab-manager-item .edit-drag-handle{cursor:grab}
 .edit-gallery-tile .edit-drag-handle{cursor:grab}
 .edit-gallery-tile.is-dragging{opacity:.62}
-.edit-gallery-tile.is-drop-target{border-color:var(--primary,#6366f1);background:#eef2ff}
+.edit-gallery-tile.is-drop-target{border-color:var(--primary,#1f2937);background:#f1f5f9}
 .edit-gallery-drag-tip{margin:2px 0 0;font-size:11px}
 .input.is-invalid{border-color:#ef4444 !important;background:#fff7f7 !important;box-shadow:0 0 0 2px rgba(239,68,68,.12)}
 #edit .edit-root button:focus-visible,
 #edit .edit-root .input:focus-visible,
-#edit .edit-root [contenteditable="true"]:focus-visible{outline:2px solid var(--primary,#6366f1);outline-offset:2px}
+#edit .edit-root [contenteditable="true"]:focus-visible{outline:2px solid var(--primary,#1f2937);outline-offset:2px}
