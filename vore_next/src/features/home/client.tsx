@@ -39,10 +39,14 @@ function HomeCard({ profile, compact = false }: { profile: ProfileRow; compact?:
       </div>
       <div className="card-name-row">
         <h3>{profile.name}</h3>
-        {card.rating ? <span className="rating">{"\u2605"} {card.rating}</span> : null}
       </div>
       <p className="card-category">{card.category}</p>
-      <p className="muted">{card.location}</p>
+      <p className="card-meta muted">
+        <span className="card-meta-location">{card.location}</span>
+        {card.rating ? (
+          <span className="rating">{"\u2605"} {card.rating}</span>
+        ) : null}
+      </p>
     </Link>
   );
 }
@@ -74,6 +78,11 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
 
   return (
     <section className="home-screen">
+      <div className="home-heading">
+        <h1>Encontra quem procuras</h1>
+        <p className="muted">Perfis profissionais verificados, perto de ti.</p>
+      </div>
+
       <div className="chips home-insights">
         <span className="home-insight-chip">Vistas hoje: 0</span>
         <span className="home-insight-chip">Em alta: {trending}</span>

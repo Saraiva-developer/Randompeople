@@ -161,22 +161,6 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
         </div>
       </div>
 
-      <div id="exploreSortRow" className="chips chips-scroll">
-        {SORT_OPTIONS.map((option) => (
-          <button
-            key={option.key}
-            type="button"
-            className={sortBy === option.key ? "active" : ""}
-            onClick={() => {
-              setSortBy(option.key);
-              setVisibleCount(12);
-            }}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-
       <div className="explore-meta-row">
         <span id="exploreMetaText" className="muted">
           {filtered.length} resultados
@@ -190,23 +174,47 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
         </span>
       </div>
 
-      <div id="exploreActiveFilters" className="explore-active-filters">
-        {DISCOVERY_OPTIONS.map((option) => (
-          <button
-            key={option.key}
-            type="button"
-            className={`vore-chip-button${discovery === option.key ? " active" : ""}`}
-            onClick={() => {
-              setDiscovery(option.key);
-              setVisibleCount(12);
-            }}
-          >
-            {option.label}
-          </button>
-        ))}
+      <div id="exploreSortRow" className="explore-sort-row">
+        <span className="explore-group-label">Ordenar</span>
+        <div className="chips chips-scroll explore-sort-chips">
+          {SORT_OPTIONS.map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              className={sortBy === option.key ? "active" : ""}
+              onClick={() => {
+                setSortBy(option.key);
+                setVisibleCount(12);
+              }}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="chips chips-scroll">
+      <div className="explore-filter-group">
+        <span className="explore-group-label">Filtrar</span>
+        <div id="exploreActiveFilters" className="explore-active-filters">
+          {DISCOVERY_OPTIONS.map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              className={`vore-chip-button${discovery === option.key ? " active" : ""}`}
+              onClick={() => {
+                setDiscovery(option.key);
+                setVisibleCount(12);
+              }}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="explore-filter-group">
+        <span className="explore-group-label">Categorias</span>
+        <div className="chips chips-scroll explore-category-chips">
         {CATEGORY_OPTIONS.map((option) => {
           const active = categories.includes(option.key);
           return (
@@ -227,6 +235,7 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
             </button>
           );
         })}
+        </div>
       </div>
 
       <div id="exploreCards" className="grid">
@@ -259,10 +268,12 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
               </div>
               <div className="card-name-row">
                 <h3>{profile.name}</h3>
-                {rating ? <span className="rating">★ {rating}</span> : null}
               </div>
               <p className="card-category">{category || "Perfil"}</p>
-              <p className="muted">{location || "Portugal"}</p>
+              <p className="card-meta muted">
+                <span className="card-meta-location">{location || "Portugal"}</span>
+                {rating ? <span className="rating">★ {rating}</span> : null}
+              </p>
             </Link>
           );
         })}
