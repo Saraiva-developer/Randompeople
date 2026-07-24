@@ -29,29 +29,20 @@ function HomeCard({ profile, compact = false }: { profile: ProfileRow; compact?:
       {!card.verified && badgeLabel ? (
         <span className={`card-badge card-badge-${card.badge}`}>{badgeLabel}</span>
       ) : null}
-      <div className="card-cover">
-        {card.cover ? (
-          <img src={card.cover} alt="" className="card-cover-image" />
+      <div className="card-avatar-wrap">
+        {card.avatar ? (
+          <img src={card.avatar} alt={profile.name} className="card-avatar" />
         ) : (
-          <div className="card-cover-placeholder" />
+          <div className="card-avatar placeholder">{profile.name.slice(0, 1).toUpperCase()}</div>
         )}
-        <div className="card-avatar-wrap">
-          {card.avatar ? (
-            <img src={card.avatar} alt={profile.name} className="card-avatar" />
-          ) : (
-            <div className="card-avatar placeholder">{profile.name.slice(0, 1).toUpperCase()}</div>
-          )}
-          {card.verified ? <span className="card-avatar-verif">{"\u2713"}</span> : null}
-        </div>
+        {card.verified ? <span className="card-avatar-verif">{"\u2713"}</span> : null}
       </div>
-      <div className="card-body">
-        <div className="card-name-row">
-          <h3>{profile.name}</h3>
-          {card.rating ? <span className="rating">{"\u2605"} {card.rating}</span> : null}
-        </div>
-        <p className="muted">{card.category}</p>
-        <p className="muted">{card.location}</p>
+      <div className="card-name-row">
+        <h3>{profile.name}</h3>
+        {card.rating ? <span className="rating">{"\u2605"} {card.rating}</span> : null}
       </div>
+      <p className="card-category">{card.category}</p>
+      <p className="muted">{card.location}</p>
     </Link>
   );
 }

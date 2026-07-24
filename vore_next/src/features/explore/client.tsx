@@ -233,7 +233,6 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
         {visible.map((profile) => {
           const data = getProfileData(profile.data);
           const avatar = String(profile.avatar_url || data.avatar || "").trim();
-          const cover = String(profile.cover_url || data.cover || "").trim();
           const rating = String(data.rating || "").trim();
           const verified =
             data.verified === true ||
@@ -248,31 +247,22 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
               {!verified && badgeLabel ? (
                 <span className={`card-badge card-badge-${badge}`}>{badgeLabel}</span>
               ) : null}
-              <div className="card-cover">
-                {cover ? (
-                  <img src={cover} alt="" className="card-cover-image" />
+              <div className="card-avatar-wrap">
+                {avatar ? (
+                  <img src={avatar} alt={profile.name} className="card-avatar" />
                 ) : (
-                  <div className="card-cover-placeholder" />
+                  <div className="card-avatar placeholder">
+                    {profile.name.slice(0, 1).toUpperCase()}
+                  </div>
                 )}
-                <div className="card-avatar-wrap">
-                  {avatar ? (
-                    <img src={avatar} alt={profile.name} className="card-avatar" />
-                  ) : (
-                    <div className="card-avatar placeholder">
-                      {profile.name.slice(0, 1).toUpperCase()}
-                    </div>
-                  )}
-                  {verified ? <span className="card-avatar-verif">✓</span> : null}
-                </div>
+                {verified ? <span className="card-avatar-verif">✓</span> : null}
               </div>
-              <div className="card-body">
-                <div className="card-name-row">
-                  <h3>{profile.name}</h3>
-                  {rating ? <span className="rating">★ {rating}</span> : null}
-                </div>
-                <p className="muted">{category || "Perfil"}</p>
-                <p className="muted">{location || "Portugal"}</p>
+              <div className="card-name-row">
+                <h3>{profile.name}</h3>
+                {rating ? <span className="rating">★ {rating}</span> : null}
               </div>
+              <p className="card-category">{category || "Perfil"}</p>
+              <p className="muted">{location || "Portugal"}</p>
             </Link>
           );
         })}

@@ -62,7 +62,6 @@ export function getCardDisplayData(profile: ProfileRow) {
 
   return {
     avatar: String(profile.avatar_url || data.avatar || "").trim(),
-    cover: String(profile.cover_url || data.cover || "").trim(),
     badge,
     verified,
     rating: String(data.rating || "").trim(),
