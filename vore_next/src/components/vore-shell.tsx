@@ -172,19 +172,6 @@ export function VoreShell({
           </nav>
         </header>
 
-        <div id="editNavHandle" className="edit-nav-handle" aria-hidden="true">
-          <button
-            type="button"
-            className="edit-nav-tab"
-            aria-label="Abrir navegacao"
-            title="Abrir navegacao"
-          >
-            <span className="edit-nav-tab-arrow" aria-hidden="true">
-              ▶
-            </span>
-          </button>
-        </div>
-
         <main className="layout">
           <section className="screen active">{children}</section>
         </main>
