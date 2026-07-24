@@ -288,6 +288,7 @@ a {
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
+  outline: none;
 }
 
 .explore-sort-chips button.active {
@@ -295,6 +296,12 @@ a {
   color: var(--text);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.explore-sort-chips button:focus-visible {
+  outline: 2px solid #94a3b8;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .explore-filter-group {
@@ -746,6 +753,7 @@ button.active {
 
 .card-category {
   display: inline-flex;
+  max-width: 100%;
   padding: 2px 9px;
   border-radius: 999px;
   background: #f1f5f9;
@@ -754,6 +762,9 @@ button.active {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0 0 6px;
 }
 
@@ -801,13 +812,13 @@ button.active {
 }
 
 .suggested-strip .card {
-  flex: 0 0 132px;
-  min-height: 150px;
+  flex: 0 0 152px;
+  min-height: 168px;
 }
 
 .card-compact {
-  padding: 14px 8px 10px;
-  min-height: 150px;
+  padding: 14px 10px 10px;
+  min-height: 168px;
 }
 
 .card-compact .card-avatar {
@@ -822,6 +833,13 @@ button.active {
 
 .card-compact h3 {
   font-size: 12px;
+  overflow: visible;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.25;
+  text-align: center;
 }
 
 .card-compact .card-category {
