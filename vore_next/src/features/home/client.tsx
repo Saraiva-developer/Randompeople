@@ -78,17 +78,25 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
 
   return (
     <section className="home-screen">
-      <div className="home-heading">
-        <h1>Encontra quem procuras</h1>
-        <p className="muted">Perfis profissionais verificados, perto de ti.</p>
-      </div>
-
-      <div className="chips home-insights">
-        <span className="home-insight-chip">Vistas hoje: 0</span>
-        <span className="home-insight-chip">Em alta: {trending}</span>
-        <span className="home-insight-chip">
-          Promocoes: {promoCount} | Novos: {newCount}
-        </span>
+      <div className="home-hero">
+        <div className="home-hero-main">
+          <h1>Encontra quem procuras</h1>
+          <p className="muted">Perfis profissionais verificados, perto de ti.</p>
+        </div>
+        <div className="home-hero-stats">
+          <div className="home-stat">
+            <strong>{promoCount}</strong>
+            <span>Promocoes</span>
+          </div>
+          <div className="home-stat">
+            <strong>{newCount}</strong>
+            <span>Novos</span>
+          </div>
+          <div className="home-stat home-stat-trend">
+            <span>Em alta</span>
+            <strong>{trending}</strong>
+          </div>
+        </div>
       </div>
 
       <div id="homeFilterChips" className="chips chips-scroll notranslate" translate="no">
@@ -104,16 +112,21 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
         ))}
       </div>
 
-      <h3 className="section-title">Sugestoes</h3>
+      <div className="section-heading-row">
+        <h3 className="section-title">Sugestoes</h3>
+      </div>
       <div id="homeSuggested" className="suggested-strip">
         {suggested.map((profile) => (
           <HomeCard key={`suggested-${profile.id}`} profile={profile} compact />
         ))}
       </div>
 
-      <h3 id="homeProfilesTitle" className="section-title">
-        {HOME_FILTERS.find((filter) => filter.id === activeFilter)?.label || "Destaques"}
-      </h3>
+      <div className="section-heading-row">
+        <h3 id="homeProfilesTitle" className="section-title">
+          {HOME_FILTERS.find((filter) => filter.id === activeFilter)?.label || "Destaques"}
+        </h3>
+        <span className="section-count muted">{homeList.length} perfis</span>
+      </div>
       <div id="homeCards" className="grid">
         {homeList.map((profile) => (
           <HomeCard key={profile.id} profile={profile} />
