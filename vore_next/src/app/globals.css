@@ -284,25 +284,20 @@ a {
 
 .explore-sort-chips button {
   border: none;
-  background: transparent;
+  background: none;
+  box-shadow: none;
   padding: 4px 10px 4px 0;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--muted);
   outline: none;
 }
 
 .explore-sort-chips button.active {
-  background: transparent;
+  background: none;
+  box-shadow: none;
   color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.explore-sort-chips button:focus-visible {
-  outline: 2px solid #94a3b8;
-  outline-offset: 2px;
-  border-radius: 4px;
+  font-weight: 700;
 }
 
 .explore-filter-group {
@@ -1034,6 +1029,7 @@ button.active {
   align-items: center;
   justify-content: center;
   width: 100%;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 5px 8px;
@@ -1243,6 +1239,7 @@ button.active {
     padding: 14px 10px 12px;
     background: transparent;
     border-left: 1px solid var(--line);
+    overflow-x: hidden;
     overflow-y: auto;
   }
 
