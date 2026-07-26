@@ -2013,10 +2013,10 @@ button.active {
 
 .legacy-profile-shell {
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0.35));
-  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 .legacy-profile-cover {
@@ -2046,16 +2046,18 @@ button.active {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
 }
 
 .legacy-profile-head-main {
-  display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 18px;
-  margin-top: -58px;
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .legacy-profile-avatar-wrap {
@@ -2068,34 +2070,39 @@ button.active {
   height: 92px;
   object-fit: cover;
   border-radius: 999px;
-  border: 3px solid rgba(15, 23, 42, 0.86);
-  background: #0f172a;
+  border: 3px solid var(--card);
+  box-shadow: 0 0 0 1px var(--line);
+  background: #dbe3ef;
 }
 
 .legacy-profile-avatar.placeholder,
 .profile-partner-avatar.placeholder {
   display: grid;
   place-items: center;
-  background: rgba(148, 163, 184, 0.14);
-  color: #e2e8f0;
+  background: #dbe3ef;
+  color: #20324f;
   font-weight: 700;
 }
 
 .legacy-profile-main-copy {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 8px;
 }
 
 .legacy-profile-name-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
 .legacy-profile-name-row h1 {
   margin: 0;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
-  line-height: 0.98;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .legacy-profile-verified {
@@ -2113,7 +2120,7 @@ button.active {
 
 .legacy-profile-category {
   margin: 0;
-  color: #cbd5e1;
+  color: var(--muted);
 }
 
 .legacy-profile-meta-row,
@@ -2122,6 +2129,7 @@ button.active {
 .legacy-profile-subtabs {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -2135,18 +2143,20 @@ button.active {
   min-height: 36px;
   padding: 0 12px;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid var(--line);
 }
 
 .legacy-profile-pill {
-  background: rgba(15, 23, 42, 0.86);
-  color: #e2e8f0;
+  background: #f1f5f9;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .legacy-profile-social-btn {
-  background: rgba(30, 41, 59, 0.78);
-  color: #f8fafc;
+  background: #f1f5f9;
+  color: var(--text);
   font-size: 0.92rem;
+  font-weight: 600;
 }
 
 .legacy-profile-tabs,

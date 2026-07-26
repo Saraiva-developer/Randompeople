@@ -300,10 +300,13 @@ export default async function PublicProfilePage({
         {activeTab === "sobre" ? (
           <div className="legacy-profile-content">
             <div className="profile-about-content">
-              <p>
-                {about ||
-                  "Sem descricao ainda. Esta area replica a aba 'Sobre' da Vore original e vai crescer com mais detalhe visual e funcional."}
-              </p>
+              {(about ||
+                "Sem descricao ainda. Esta area replica a aba 'Sobre' da Vore original e vai crescer com mais detalhe visual e funcional.")
+                .replace(/<\/?p>/g, "\n\n")
+                .split(/\n{2,}/)
+                .map((paragraph) => paragraph.trim())
+                .filter(Boolean)
+                .map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             </div>
           </div>
         ) : (

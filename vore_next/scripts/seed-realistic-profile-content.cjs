@@ -199,10 +199,10 @@ function aboutFor(profile, type, category, location) {
     creator: `${name} trabalha conteúdo, imagem e projetos digitais com uma abordagem organizada, visual e próxima.`,
   };
   return [
-    `<p>${openings[type] || openings.service_pro}</p>`,
-    `<p>No perfil encontras informação útil sobre ${category.toLowerCase()}, imagens, horários, localização e formas rápidas de contacto.</p>`,
-    "<p>A Vore organiza tudo num só lugar para conseguires perceber rapidamente o ambiente, as opções disponíveis e a melhor forma de avançar.</p>",
-  ].join("");
+    openings[type] || openings.service_pro,
+    `No perfil encontras informação útil sobre ${category.toLowerCase()}, imagens, horários, localização e formas rápidas de contacto.`,
+    "A Vore organiza tudo num só lugar para conseguires perceber rapidamente o ambiente, as opções disponíveis e a melhor forma de avançar.",
+  ].join("\n\n");
 }
 
 function commonData(profile, type, category, seed) {
