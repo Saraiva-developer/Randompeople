@@ -46,18 +46,6 @@ a {
   text-decoration: none;
 }
 
-.legacy-vore-frame-page {
-  min-height: 100vh;
-  background: #fff;
-}
-
-.legacy-vore-frame {
-  display: block;
-  width: 100%;
-  min-height: 100vh;
-  border: 0;
-}
-
 .app-shell.hidden {
   display: none;
 }

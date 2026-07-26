@@ -234,7 +234,7 @@ export default async function PublicProfilePage({
               ←
             </Link>
             <div className="legacy-profile-head-actions">
-              <Link href="/dashboard/profile" className="profile-top-circle">
+              <Link href="/edit-profile" className="profile-top-circle">
                 ⋮
               </Link>
             </div>

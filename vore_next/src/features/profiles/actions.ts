@@ -102,7 +102,7 @@ function readField(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
-function redirectWithMessage(path: "/dashboard/profile", message: string) {
+function redirectWithMessage(path: "/edit-profile", message: string) {
   const params = new URLSearchParams({ message });
   redirect(`${path}?${params.toString()}` as Route);
 }
@@ -144,13 +144,13 @@ export async function saveProfileAction(formData: FormData) {
   const campaignsLines = readLines(formData, "campaigns");
 
   if (!rawName || !type) {
-    redirectWithMessage("/dashboard/profile", "Preenche pelo menos nome e tipo de perfil.");
+    redirectWithMessage("/edit-profile", "Preenche pelo menos nome e tipo de perfil.");
   }
 
   const slug = slugify(rawSlug || rawName);
 
   if (!slug) {
-    redirectWithMessage("/dashboard/profile", "Nao foi possivel gerar um slug valido.");
+    redirectWithMessage("/edit-profile", "Nao foi possivel gerar um slug valido.");
   }
 
   const supabase = await getSupabaseServerClient();
@@ -231,12 +231,12 @@ export async function saveProfileAction(formData: FormData) {
   const { error } = await profilesTable.upsert(payload);
 
   if (error) {
-    redirectWithMessage("/dashboard/profile", error.message);
+    redirectWithMessage("/edit-profile", error.message);
   }
 
   revalidatePath("/", "layout");
   revalidatePath("/dashboard");
-  revalidatePath("/dashboard/profile");
+  revalidatePath("/edit-profile");
   revalidatePath(`/profile/${slug}` as Route);
   redirect(`/profile/${slug}` as Route);
 }
