@@ -271,7 +271,17 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
               </div>
               <p className="card-category">{category || "Perfil"}</p>
               <p className="muted">{location || "Portugal"}</p>
-              {rating ? <p className="rating">★ {rating}</p> : null}
+              {rating ? (
+                <p className="rating">
+                  <svg className="rating-star" viewBox="0 0 20 20" aria-hidden="true">
+                    <path
+                      d="M10 1.6l2.47 5.24 5.77.75-4.19 4.03.99 5.76L10 14.87l-5.04 2.51.99-5.76-4.19-4.03 5.77-.75L10 1.6Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  {rating}
+                </p>
+              ) : null}
             </Link>
           );
         })}

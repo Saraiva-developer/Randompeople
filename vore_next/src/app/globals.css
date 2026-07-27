@@ -797,11 +797,20 @@ button.active {
 }
 
 .rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   margin: 2px 0 0;
-  text-align: center;
   color: #b45309;
   font-weight: 600;
   font-size: 12px;
+}
+
+.rating-star {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .section-title {
