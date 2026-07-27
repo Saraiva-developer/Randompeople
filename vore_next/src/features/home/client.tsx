@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { ProfileRow } from "@/features/vore-shell/display";
 import {
   getBadgeType,
@@ -59,6 +59,11 @@ function HomeCard({ profile, compact = false }: { profile: ProfileRow; compact?:
 
 export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const [activeFilter, setActiveFilter] = useState<HomeFilter>("destaques");
+  const suggestedRef = useRef<HTMLDivElement>(null);
+
+  function scrollSuggested(direction: -1 | 1) {
+    suggestedRef.current?.scrollBy({ left: direction * 260, behavior: "smooth" });
+  }
 
   const sortedProfiles = useMemo(
     () => [...profiles].sort((a, b) => scoreLocal(b) - scoreLocal(a)),
@@ -113,10 +118,28 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       <div className="section-heading-row">
         <h3 className="section-title">Sugestoes</h3>
       </div>
-      <div id="homeSuggested" className="suggested-strip">
-        {suggested.map((profile) => (
-          <HomeCard key={`suggested-${profile.id}`} profile={profile} compact />
-        ))}
+      <div className="suggested-strip-wrap">
+        <button
+          type="button"
+          className="suggested-strip-arrow suggested-strip-arrow-left"
+          aria-label="Deslizar para a esquerda"
+          onClick={() => scrollSuggested(-1)}
+        >
+          ‹
+        </button>
+        <div id="homeSuggested" className="suggested-strip" ref={suggestedRef}>
+          {suggested.map((profile) => (
+            <HomeCard key={`suggested-${profile.id}`} profile={profile} compact />
+          ))}
+        </div>
+        <button
+          type="button"
+          className="suggested-strip-arrow suggested-strip-arrow-right"
+          aria-label="Deslizar para a direita"
+          onClick={() => scrollSuggested(1)}
+        >
+          ›
+        </button>
       </div>
 
       <div className="section-heading-row">

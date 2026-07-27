@@ -836,13 +836,52 @@ button.active {
   color: var(--text);
 }
 
+.suggested-strip-wrap {
+  position: relative;
+}
+
 .suggested-strip {
   display: flex;
   gap: 3px;
   overflow-x: auto;
   padding: 2px 0 4px;
-  -webkit-mask-image: linear-gradient(90deg, #000 94%, transparent 100%);
-  mask-image: linear-gradient(90deg, #000 94%, transparent 100%);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.suggested-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.suggested-strip-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  z-index: 2;
+}
+
+.suggested-strip-arrow:hover {
+  background: #f1f5f9;
+}
+
+.suggested-strip-arrow-left {
+  left: -14px;
+}
+
+.suggested-strip-arrow-right {
+  right: -14px;
 }
 
 .suggested-strip .card {
