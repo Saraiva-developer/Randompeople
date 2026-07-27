@@ -40,12 +40,9 @@ function HomeCard({ profile, compact = false }: { profile: ProfileRow; compact?:
       <div className="card-name-row">
         <h3>{profile.name}</h3>
       </div>
-      <p className="card-meta muted">
-        <span className="card-meta-location">{card.location}</span>
-        {card.rating ? (
-          <span className="rating">{"\u2605"} {card.rating}</span>
-        ) : null}
-      </p>
+      <p className="card-category">{card.category}</p>
+      <p className="muted">{card.location}</p>
+      {card.rating ? <p className="rating">{"\u2605"} {card.rating}</p> : null}
     </Link>
   );
 }

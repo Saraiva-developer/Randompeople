@@ -797,7 +797,8 @@ button.active {
 }
 
 .rating {
-  flex-shrink: 0;
+  margin: 2px 0 0;
+  text-align: center;
   color: #b45309;
   font-weight: 600;
   font-size: 12px;

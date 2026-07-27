@@ -2,10 +2,15 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { profileTypeOptions } from "@/features/profiles/constants";
 import { getProfileData } from "@/features/profiles/view";
 import type { Database } from "@/types/supabase";
 
 type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
+
+function getTypeLabel(type: string) {
+  return profileTypeOptions.find((item) => item.value === type)?.label ?? "Perfil";
+}
 
 const DISCOVERY_OPTIONS = [
   { key: "all", label: "Tudo" },
@@ -243,6 +248,7 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
             String(data.badge || "").trim().toLowerCase() === "verif";
           const badge = String(data.badge || "").trim().toLowerCase();
           const badgeLabel = badge === "promo" ? "Promo" : badge === "novo" ? "Novo" : "";
+          const category = String(data.category || data.role || getTypeLabel(profile.type)).trim();
           const location = String(data.location || profile.location || "Portugal").trim();
 
           return (
@@ -263,10 +269,9 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
               <div className="card-name-row">
                 <h3>{profile.name}</h3>
               </div>
-              <p className="card-meta muted">
-                <span className="card-meta-location">{location || "Portugal"}</span>
-                {rating ? <span className="rating">★ {rating}</span> : null}
-              </p>
+              <p className="card-category">{category || "Perfil"}</p>
+              <p className="muted">{location || "Portugal"}</p>
+              {rating ? <p className="rating">★ {rating}</p> : null}
             </Link>
           );
         })}
