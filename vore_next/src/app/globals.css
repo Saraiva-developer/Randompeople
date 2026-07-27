@@ -173,8 +173,8 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 24px 16px 18px;
-  min-height: 190px;
+  padding: 28px 18px 22px;
+  min-height: 220px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
@@ -698,17 +698,17 @@ button.active {
 .card-avatar-wrap {
   position: relative;
   width: fit-content;
-  margin: 0 0 10px;
+  margin: 0 0 16px;
 }
 
 .card-avatar {
-  width: 76px;
-  height: 76px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 28px;
   background: #dbe3ef;
   color: #20324f;
   margin: 0;
@@ -726,7 +726,7 @@ button.active {
   justify-content: center;
   gap: 6px;
   max-width: 100%;
-  margin: 0 0 6px;
+  margin: 0 0 10px;
 }
 
 .card-name-row h3 {
@@ -772,11 +772,11 @@ button.active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 0 6px;
+  margin: 0 0 10px;
 }
 
 .card .muted {
-  margin: 0 0 3px;
+  margin: 0 0 8px;
   font-size: 12px;
   text-align: center;
   line-height: 1.28;
@@ -823,23 +823,23 @@ button.active {
 }
 
 .suggested-strip .card {
-  flex: 0 0 156px;
-  min-height: 178px;
+  flex: 0 0 168px;
+  min-height: 200px;
 }
 
 .card-compact {
-  padding: 16px 10px 10px;
-  min-height: 178px;
+  padding: 18px 10px 12px;
+  min-height: 200px;
 }
 
 .card-compact .card-avatar {
-  width: 48px;
-  height: 48px;
-  font-size: 16px;
+  width: 58px;
+  height: 58px;
+  font-size: 18px;
 }
 
 .card-compact .card-avatar-wrap {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 .card-compact h3 {
