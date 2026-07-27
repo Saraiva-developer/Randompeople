@@ -173,8 +173,8 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 28px 18px 22px;
-  min-height: 220px;
+  padding: 18px 12px 16px;
+  min-height: 180px;
   border-radius: 8px;
   border-color: #000;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -710,13 +710,13 @@ button.active {
 }
 
 .card-avatar {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 18px;
   background: #dbe3ef;
   color: #20324f;
   margin: 0;
@@ -1309,7 +1309,7 @@ button.active {
 @media (min-width: 1280px) {
   #homeCards,
   #exploreCards {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
