@@ -174,7 +174,7 @@ a {
   align-items: center;
   justify-content: flex-start;
   padding: 28px 18px 22px;
-  min-height: 300px;
+  min-height: 220px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
@@ -702,13 +702,13 @@ button.active {
 }
 
 .card-avatar {
-  width: 160px;
-  height: 160px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: 600;
-  font-size: 46px;
+  font-size: 24px;
   background: #dbe3ef;
   color: #20324f;
   margin: 0;
