@@ -174,7 +174,7 @@ a {
   align-items: center;
   justify-content: flex-start;
   padding: 28px 18px 22px;
-  min-height: 240px;
+  min-height: 300px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
@@ -702,13 +702,13 @@ button.active {
 }
 
 .card-avatar {
-  width: 108px;
-  height: 108px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: 600;
-  font-size: 32px;
+  font-size: 46px;
   background: #dbe3ef;
   color: #20324f;
   margin: 0;
@@ -1266,57 +1266,6 @@ button.active {
     min-height: 760px;
   }
 
-  .suggested-strip .card {
-    min-width: 124px;
-    max-width: 124px;
-    padding: 7px;
-    min-height: 146px;
-  }
-
-  #homeCards .card,
-  #exploreCards .card {
-    min-height: 158px;
-    padding: 9px;
-    border-radius: 10px;
-  }
-
-  #homeCards .card-avatar-wrap,
-  #exploreCards .card-avatar-wrap {
-    margin-bottom: 6px;
-  }
-
-  #homeCards .card-avatar,
-  #exploreCards .card-avatar {
-    width: 46px;
-    height: 46px;
-  }
-
-  #homeCards .card-avatar-verif,
-  #exploreCards .card-avatar-verif {
-    width: 12px;
-    height: 12px;
-    font-size: 7px;
-    border-width: 1px;
-  }
-
-  #homeCards .card h3,
-  #exploreCards .card h3 {
-    font-size: 15px;
-    line-height: 1.2;
-  }
-
-  #homeCards .card .muted,
-  #exploreCards .card .muted {
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-
-  #homeCards .rating,
-  #exploreCards .rating {
-    font-size: 12px;
-    margin-top: 3px;
-  }
-
   .home-screen .home-insights {
     margin: 6px 0 8px;
   }
@@ -1337,26 +1286,6 @@ button.active {
 
   .home-screen #homeCards {
     margin-top: 2px;
-  }
-
-  .home-screen .card h3 {
-    font-size: 15px;
-    font-weight: 800;
-  }
-
-  .home-screen .card-compact h3 {
-    font-size: 13px;
-    font-weight: 800;
-  }
-
-  .home-screen .card .muted {
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-
-  .home-screen .card-compact .muted {
-    font-size: 11px;
-    margin-bottom: 7px;
   }
 }
 
