@@ -733,12 +733,14 @@ button.active {
   align-items: baseline;
   justify-content: center;
   gap: 6px;
-  max-width: 100%;
+  width: 100%;
+  min-width: 0;
   margin: 0 0 10px;
 }
 
 .card-name-row h3 {
   margin: 0;
+  min-width: 0;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.005em;
@@ -845,6 +847,9 @@ button.active {
 
 .suggested-strip .card {
   flex: 0 0 122px;
+  width: 122px;
+  min-width: 0;
+  max-width: 122px;
   min-height: 140px;
 }
 
@@ -865,11 +870,10 @@ button.active {
 
 .card-compact h3 {
   font-size: 12px;
-  overflow: visible;
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   line-height: 1.25;
   text-align: center;
 }
