@@ -832,7 +832,7 @@ button.active {
 
 .suggested-strip {
   display: flex;
-  gap: 10px;
+  gap: 3px;
   overflow-x: auto;
   padding: 2px 0 4px;
   -webkit-mask-image: linear-gradient(90deg, #000 94%, transparent 100%);
