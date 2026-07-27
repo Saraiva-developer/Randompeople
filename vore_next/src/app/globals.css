@@ -785,9 +785,13 @@ button.active {
 
 .card .muted {
   margin: 0 0 8px;
+  width: 100%;
   font-size: 12px;
   text-align: center;
   line-height: 1.28;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-meta {
