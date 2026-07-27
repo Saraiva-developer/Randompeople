@@ -426,6 +426,12 @@ button.active {
   border-color: #111827;
 }
 
+#homeFilterChips button {
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
 .vore-section-heading {
   margin: 12px 0;
 }
