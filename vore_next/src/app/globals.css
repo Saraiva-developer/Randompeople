@@ -823,23 +823,23 @@ button.active {
 }
 
 .suggested-strip .card {
-  flex: 0 0 168px;
-  min-height: 200px;
+  flex: 0 0 156px;
+  min-height: 178px;
 }
 
 .card-compact {
-  padding: 18px 10px 12px;
-  min-height: 200px;
+  padding: 16px 10px 10px;
+  min-height: 178px;
 }
 
 .card-compact .card-avatar {
-  width: 58px;
-  height: 58px;
-  font-size: 18px;
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
 }
 
 .card-compact .card-avatar-wrap {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .card-compact h3 {
