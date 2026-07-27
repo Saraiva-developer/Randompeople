@@ -149,8 +149,6 @@ a {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
-  background: #000;
-  padding: 4px;
 }
 
 @media (max-width: 560px) {
