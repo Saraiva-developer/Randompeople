@@ -844,19 +844,19 @@ button.active {
 }
 
 .suggested-strip .card {
-  flex: 0 0 156px;
-  min-height: 178px;
+  flex: 0 0 122px;
+  min-height: 140px;
 }
 
 .card-compact {
-  padding: 16px 10px 10px;
-  min-height: 178px;
+  padding: 12px 8px 8px;
+  min-height: 140px;
 }
 
 .card-compact .card-avatar {
-  width: 48px;
-  height: 48px;
-  font-size: 16px;
+  width: 38px;
+  height: 38px;
+  font-size: 13px;
 }
 
 .card-compact .card-avatar-wrap {
