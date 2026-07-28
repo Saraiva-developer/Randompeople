@@ -2299,9 +2299,7 @@ button.active {
 }
 
 .legacy-profile-meta-row,
-.legacy-profile-social-row,
-.legacy-profile-tabs,
-.legacy-profile-subtabs {
+.legacy-profile-social-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -2309,8 +2307,6 @@ button.active {
 }
 
 .legacy-profile-pill,
-.legacy-profile-tabs a,
-.legacy-profile-subtabs a,
 .legacy-profile-social-btn {
   display: inline-flex;
   align-items: center;
@@ -2334,22 +2330,200 @@ button.active {
   font-weight: 600;
 }
 
+/* Profile header rebuilt after the vore_mobile_native ProfileScreen */
+.profile-native-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 20px 0;
+}
+
+.profile-native-back,
+.profile-native-more {
+  position: absolute;
+  top: 12px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.profile-native-back {
+  left: 14px;
+}
+
+.profile-native-more {
+  right: 14px;
+}
+
+.profile-native-avatar-wrap {
+  margin-top: 30px;
+}
+
+.profile-native-avatar {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 2px solid #0f172a;
+  background: #d1d5db;
+}
+
+.profile-native-avatar.placeholder {
+  display: grid;
+  place-items: center;
+  color: #20324f;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.profile-native-badge-row {
+  margin-top: 10px;
+}
+
+.profile-native-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.profile-native-badge-promo {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.profile-native-badge-novo {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.profile-native-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.profile-native-name-row h1 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.profile-native-role {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.profile-native-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.profile-native-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.profile-native-star {
+  display: inline-flex;
+  color: #f59e0b;
+}
+
+.profile-native-social-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.profile-native-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.profile-native-social-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+}
+
+.profile-native-divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: #e9eef5;
+}
+
 .legacy-profile-tabs,
 .legacy-profile-subtabs {
-  padding: 18px 20px 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 12px 20px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.legacy-profile-tabs::-webkit-scrollbar,
+.legacy-profile-subtabs::-webkit-scrollbar {
+  display: none;
+}
+
+.legacy-profile-subtabs {
+  padding-top: 8px;
 }
 
 .legacy-profile-tabs a,
 .legacy-profile-subtabs a {
-  background: #f1f5f9;
-  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #475569;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .legacy-profile-tabs a.active,
 .legacy-profile-subtabs a.active {
-  background: var(--primary-dark);
-  color: #fff;
-  border-color: var(--primary-dark);
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
   font-weight: 700;
 }
 
