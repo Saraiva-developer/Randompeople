@@ -168,7 +168,11 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       <div
         className="suggested-strip-wrap"
         ref={suggestedWrapRef}
-        style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
+        style={
+          suggestedWidth
+            ? { width: suggestedWidth, maxWidth: "100%" }
+            : { visibility: "hidden" }
+        }
       >
         <button
           type="button"
