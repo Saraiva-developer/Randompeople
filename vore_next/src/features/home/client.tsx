@@ -67,6 +67,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const [suggestedWidth, setSuggestedWidth] = useState<number | null>(null);
 
   const [suggestedStep, setSuggestedStep] = useState(SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP);
+  const lastComputedRef = useRef<{ width: number; step: number } | null>(null);
 
   useEffect(() => {
     const measureTarget = suggestedWrapRef.current?.parentElement;
@@ -81,15 +82,28 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       } else if (cards.length === 1) {
         step = cards[0].offsetWidth + SUGGESTED_CARD_GAP;
       }
+      if (!step) return;
 
+      // Measure against the strip's own left offset within the wrap, ignoring
+      // our own applied width so this never feeds back into itself.
       const available = measureTarget!.clientWidth;
       const count = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
+      const width = count * step - SUGGESTED_CARD_GAP;
+
+      const last = lastComputedRef.current;
+      if (last && last.width === width && last.step === step) return;
+      lastComputedRef.current = { width, step };
       setSuggestedStep(step);
-      setSuggestedWidth(count * step - SUGGESTED_CARD_GAP);
+      setSuggestedWidth(width);
     }
 
     recompute();
-    const observer = new ResizeObserver(recompute);
+    const observer = new ResizeObserver(() => {
+      // Only the true available space (measureTarget) is observed, never the
+      // wrap/strip themselves, so setting their width here cannot re-trigger
+      // this observer.
+      recompute();
+    });
     observer.observe(measureTarget);
     return () => observer.disconnect();
   }, []);
