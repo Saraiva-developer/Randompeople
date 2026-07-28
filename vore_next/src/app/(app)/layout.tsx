@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 import { VoreShell } from "@/components/vore-shell";
-import { getCurrentUser } from "@/features/auth/session";
+import { getCurrentAccount } from "@/features/vore-shell/queries";
 import { VoreRightRail } from "@/features/vore-shell/right-rail";
 
 export default async function AppShellLayout({ children }: { children: ReactNode }) {
-  const user = await getCurrentUser();
+  const account = await getCurrentAccount();
+  const accountType = !account ? "guest" : account.account_type === "common" ? "common" : "professional";
 
   return (
-    <VoreShell rightRail={<VoreRightRail />} isAuthenticated={!!user}>
+    <VoreShell rightRail={<VoreRightRail />} accountType={accountType}>
       {children}
     </VoreShell>
   );

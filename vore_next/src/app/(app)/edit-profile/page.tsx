@@ -5,6 +5,7 @@ import { saveProfileAction } from "@/features/profiles/actions";
 import { ProfileContentEditor } from "@/features/profiles/content-editor";
 import { profileTypeOptions } from "@/features/profiles/constants";
 import { getProfileByUserId } from "@/features/profiles/queries";
+import { getCurrentAccount } from "@/features/vore-shell/queries";
 import { getProfileData } from "@/features/profiles/view";
 import type { Json } from "@/types/supabase";
 
@@ -43,6 +44,12 @@ export default async function EditProfilePage({
 
   if (!user) {
     redirect("/login?message=Faz login para criares o teu perfil.");
+  }
+
+  // Only professional accounts own a public profile to edit.
+  const account = await getCurrentAccount();
+  if (account?.account_type === "common") {
+    redirect("/profile");
   }
 
   const [profile, { message }] = await Promise.all([

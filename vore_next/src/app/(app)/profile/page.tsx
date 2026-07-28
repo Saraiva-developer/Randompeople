@@ -1,12 +1,35 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/features/auth/session";
-import { getCurrentOwnedProfile } from "@/features/vore-shell/queries";
+import { PersonalProfileClient } from "@/features/profiles/personal-profile-client";
+import { getSavedProfiles } from "@/features/saved/queries";
+import {
+  getCurrentAccount,
+  getCurrentOwnedProfile,
+  getPublishedProfiles
+} from "@/features/vore-shell/queries";
 
 export default async function OwnProfilePage() {
-  const user = await getCurrentUser();
+  const account = await getCurrentAccount();
 
-  if (!user) {
+  if (!account) {
     redirect("/login?message=Inicia sessao para veres o teu perfil.");
+  }
+
+  // Personal ("common") accounts have no public profile of their own; like the
+  // native app they get the saved/recent/alerts screen instead.
+  if (account.account_type === "common") {
+    const [savedProfiles, profiles] = await Promise.all([
+      getSavedProfiles(),
+      getPublishedProfiles(160)
+    ]);
+
+    return (
+      <PersonalProfileClient
+        name={account.name || ""}
+        email={account.email}
+        savedProfiles={savedProfiles}
+        profiles={profiles}
+      />
+    );
   }
 
   const profile = await getCurrentOwnedProfile();

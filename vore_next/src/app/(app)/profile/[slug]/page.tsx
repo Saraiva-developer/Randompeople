@@ -8,6 +8,9 @@ import {
 } from "@/features/profiles/view";
 import { getCurrentUser } from "@/features/auth/session";
 import { getPublicProfileBySlug } from "@/features/profiles/queries";
+import { isProfileSaved } from "@/features/saved/queries";
+import { RecentProfileTracker, SaveProfileButton } from "@/features/saved/save-profile-button";
+import { getCurrentAccount } from "@/features/vore-shell/queries";
 import { ProfileTabsClient } from "@/features/profiles/profile-tabs-client";
 import { ProfileStoryAvatar } from "@/features/profiles/story-avatar";
 import { ProfileRatingButton } from "@/features/reviews/reviews-modal";
@@ -154,12 +157,16 @@ export default async function PublicProfilePage({
     .filter(Boolean)
     .slice(0, 20);
 
-  const [reviews, reviewer, viewer] = await Promise.all([
+  const [reviews, reviewer, viewer, account] = await Promise.all([
     getProfileReviews(profile.id),
     getReviewerContext(profile.id, profile.user_id),
-    getCurrentUser()
+    getCurrentUser(),
+    getCurrentAccount()
   ]);
   const canEdit = !!viewer && viewer.id === profile.user_id;
+  // Saving is a personal-account feature in the native app.
+  const canSave = account?.account_type === "common";
+  const saved = canSave ? await isProfileSaved(profile.id) : false;
 
   return (
     <main className="page-shell">
@@ -177,6 +184,12 @@ export default async function PublicProfilePage({
               ⋮
             </Link>
           ) : null}
+          {canSave ? (
+            <div className="profile-native-save-wrap">
+              <SaveProfileButton profileId={profile.id} initialSaved={saved} />
+            </div>
+          ) : null}
+          <RecentProfileTracker profileId={profile.id} />
 
           <div className={`profile-native-avatar-wrap${stories.length ? " has-stories" : ""}`}>
             <ProfileStoryAvatar avatar={avatarImage} name={profile.name} stories={stories} />

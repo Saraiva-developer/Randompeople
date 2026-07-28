@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// `guest: true` marks the items a signed-out visitor can actually use.
-// Everything else needs an account, so it stays hidden in guest mode.
+// Nav differs per account type, like the native app's tab bar:
+//   guest        -> only `guest` items (+ an Entrar button)
+//   common        -> everything except `professionalOnly` items
+//   professional  -> everything
 const navItems = [
   {
     href: "/",
@@ -87,6 +89,7 @@ const navItems = [
     href: "/edit-profile",
     tab: "edit",
     label: "Editar Perfil",
+    professionalOnly: true,
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -133,11 +136,11 @@ const navItems = [
 export function VoreShell({
   children,
   rightRail,
-  isAuthenticated = false
+  accountType = "guest"
 }: {
   children: React.ReactNode;
   rightRail?: React.ReactNode;
-  isAuthenticated?: boolean;
+  accountType?: "guest" | "common" | "professional";
 }) {
   const pathname = usePathname();
 
@@ -145,9 +148,12 @@ export function VoreShell({
     return <>{children}</>;
   }
 
-  const visibleNavItems = isAuthenticated
-    ? navItems
-    : navItems.filter((item) => "guest" in item && item.guest);
+  const isGuest = accountType === "guest";
+  const visibleNavItems = navItems.filter((item) => {
+    if (isGuest) return "guest" in item && item.guest;
+    if (accountType === "common") return !("professionalOnly" in item && item.professionalOnly);
+    return true;
+  });
 
   return (
     <>
@@ -180,7 +186,7 @@ export function VoreShell({
               );
             })}
 
-            {!isAuthenticated ? (
+            {isGuest ? (
               <Link href="/login" className="nav-login-btn">
                 Entrar
               </Link>
