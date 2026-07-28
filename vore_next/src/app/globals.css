@@ -847,6 +847,7 @@ button.active {
   padding: 2px 0 4px;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
 }
 
 .suggested-strip::-webkit-scrollbar {
@@ -890,6 +891,7 @@ button.active {
   min-width: 0;
   max-width: 122px;
   min-height: 140px;
+  scroll-snap-align: start;
 }
 
 .card-compact {
