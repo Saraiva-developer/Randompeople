@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ProfileRow } from "@/features/vore-shell/display";
 import {
   getBadgeType,
@@ -57,12 +57,35 @@ function HomeCard({ profile, compact = false }: { profile: ProfileRow; compact?:
   );
 }
 
+const SUGGESTED_CARD_WIDTH = 122;
+const SUGGESTED_CARD_GAP = 3;
+
 export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const [activeFilter, setActiveFilter] = useState<HomeFilter>("destaques");
   const suggestedRef = useRef<HTMLDivElement>(null);
+  const suggestedWrapRef = useRef<HTMLDivElement>(null);
+  const [suggestedWidth, setSuggestedWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const measureTarget = suggestedWrapRef.current?.parentElement;
+    if (!measureTarget) return;
+
+    function recompute() {
+      const available = measureTarget!.clientWidth;
+      const step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
+      const count = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
+      setSuggestedWidth(count * step - SUGGESTED_CARD_GAP);
+    }
+
+    recompute();
+    const observer = new ResizeObserver(recompute);
+    observer.observe(measureTarget);
+    return () => observer.disconnect();
+  }, []);
 
   function scrollSuggested(direction: -1 | 1) {
-    suggestedRef.current?.scrollBy({ left: direction * 260, behavior: "smooth" });
+    const step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
+    suggestedRef.current?.scrollBy({ left: direction * step, behavior: "smooth" });
   }
 
   const sortedProfiles = useMemo(
@@ -118,7 +141,11 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       <div className="section-heading-row">
         <h3 className="section-title">Sugestoes</h3>
       </div>
-      <div className="suggested-strip-wrap">
+      <div
+        className="suggested-strip-wrap"
+        ref={suggestedWrapRef}
+        style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
+      >
         <button
           type="button"
           className="suggested-strip-arrow suggested-strip-arrow-left"
@@ -127,7 +154,12 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
         >
           ‹
         </button>
-        <div id="homeSuggested" className="suggested-strip" ref={suggestedRef}>
+        <div
+          id="homeSuggested"
+          className="suggested-strip"
+          ref={suggestedRef}
+          style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
+        >
           {suggested.map((profile) => (
             <HomeCard key={`suggested-${profile.id}`} profile={profile} compact />
           ))}
