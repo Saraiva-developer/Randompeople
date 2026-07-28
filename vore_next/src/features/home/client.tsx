@@ -66,14 +66,25 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const suggestedWrapRef = useRef<HTMLDivElement>(null);
   const [suggestedWidth, setSuggestedWidth] = useState<number | null>(null);
 
+  const [suggestedStep, setSuggestedStep] = useState(SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP);
+
   useEffect(() => {
     const measureTarget = suggestedWrapRef.current?.parentElement;
-    if (!measureTarget) return;
+    const strip = suggestedRef.current;
+    if (!measureTarget || !strip) return;
 
     function recompute() {
+      const cards = strip!.querySelectorAll<HTMLElement>(".card");
+      let step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
+      if (cards.length >= 2) {
+        step = cards[1].offsetLeft - cards[0].offsetLeft;
+      } else if (cards.length === 1) {
+        step = cards[0].offsetWidth + SUGGESTED_CARD_GAP;
+      }
+
       const available = measureTarget!.clientWidth;
-      const step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
       const count = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
+      setSuggestedStep(step);
       setSuggestedWidth(count * step - SUGGESTED_CARD_GAP);
     }
 
@@ -84,8 +95,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   }, []);
 
   function scrollSuggested(direction: -1 | 1) {
-    const step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
-    suggestedRef.current?.scrollBy({ left: direction * step, behavior: "smooth" });
+    suggestedRef.current?.scrollBy({ left: direction * suggestedStep, behavior: "smooth" });
   }
 
   const sortedProfiles = useMemo(
