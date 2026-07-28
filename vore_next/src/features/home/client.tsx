@@ -78,7 +78,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
     return [...raw].sort((a, b) => scoreLocal(b) - scoreLocal(a));
   }, [activeFilter, profiles]);
 
-  const suggested = sortedProfiles.slice(0, 8);
+  const suggested = sortedProfiles.slice(0, 16);
   const trending = sortedProfiles[0]?.name || "Sem dados";
   const promoCount = profiles.filter(
     (profile) => getBadgeType(profile) === "promo" || resolveProfileFilter(profile) === "promocoes"
