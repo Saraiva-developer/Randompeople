@@ -848,7 +848,6 @@ button.active {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-snap-type: x mandatory;
-  transition: width 0.15s ease;
 }
 
 .suggested-strip::-webkit-scrollbar {
@@ -887,10 +886,10 @@ button.active {
 }
 
 .suggested-strip .card {
-  flex: 0 0 122px;
-  width: 122px;
+  flex: 0 0 var(--suggested-card-width, 122px);
+  width: var(--suggested-card-width, 122px);
   min-width: 0;
-  max-width: 122px;
+  max-width: var(--suggested-card-width, 122px);
   min-height: 140px;
   scroll-snap-align: start;
 }

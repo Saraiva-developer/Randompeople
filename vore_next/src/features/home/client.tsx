@@ -64,50 +64,37 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const [activeFilter, setActiveFilter] = useState<HomeFilter>("destaques");
   const suggestedRef = useRef<HTMLDivElement>(null);
   const suggestedWrapRef = useRef<HTMLDivElement>(null);
-  const [suggestedWidth, setSuggestedWidth] = useState<number | null>(null);
-
+  const [suggestedCardWidth, setSuggestedCardWidth] = useState<number | null>(null);
   const [suggestedStep, setSuggestedStep] = useState(SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP);
-  const lastComputedRef = useRef<{ width: number; step: number } | null>(null);
 
   useLayoutEffect(() => {
-    const measureTarget = suggestedWrapRef.current?.parentElement;
+    const wrap = suggestedWrapRef.current;
     const strip = suggestedRef.current;
-    if (!measureTarget || !strip) return;
+    if (!wrap || !strip) return;
 
     function recompute() {
-      const cards = strip!.querySelectorAll<HTMLElement>(".card");
-      let step = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
-      if (cards.length >= 2) {
-        step = cards[1].offsetLeft - cards[0].offsetLeft;
-      } else if (cards.length === 1) {
-        step = cards[0].offsetWidth + SUGGESTED_CARD_GAP;
-      }
-      if (!step) return;
+      const cardCount = strip!.querySelectorAll(".card").length;
+      const available = wrap!.clientWidth;
+      if (!cardCount || !available) return;
 
-      // Measure against the strip's own left offset within the wrap, ignoring
-      // our own applied width so this never feeds back into itself.
-      if (!cards.length) return;
+      // The wrap always spans the full row; the cards stretch a few pixels so
+      // a whole number of them fills it exactly — no leftover space at the
+      // edge, no partially visible card. The wrap's own width never changes
+      // here, so observing it cannot feed back into this handler.
+      const base = SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP;
+      const fitCount = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / base));
+      const count = Math.min(fitCount, cardCount);
+      const cardWidth = (available - (count - 1) * SUGGESTED_CARD_GAP) / count;
 
-      const available = measureTarget!.clientWidth;
-      const fitCount = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
-      const count = Math.min(fitCount, cards.length);
-      const width = count * step - SUGGESTED_CARD_GAP;
-
-      const last = lastComputedRef.current;
-      if (last && last.width === width && last.step === step) return;
-      lastComputedRef.current = { width, step };
-      setSuggestedStep(step);
-      setSuggestedWidth(width);
+      setSuggestedCardWidth(cardWidth);
+      setSuggestedStep(cardWidth + SUGGESTED_CARD_GAP);
     }
 
     recompute();
     const observer = new ResizeObserver(() => {
-      // Only the true available space (measureTarget) is observed, never the
-      // wrap/strip themselves, so setting their width here cannot re-trigger
-      // this observer.
       recompute();
     });
-    observer.observe(measureTarget);
+    observer.observe(wrap);
     return () => observer.disconnect();
   }, []);
 
@@ -171,7 +158,11 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       <div
         className="suggested-strip-wrap"
         ref={suggestedWrapRef}
-        style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
+        style={
+          suggestedCardWidth
+            ? ({ "--suggested-card-width": `${suggestedCardWidth}px` } as React.CSSProperties)
+            : undefined
+        }
       >
         <button
           type="button"
@@ -181,12 +172,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
         >
           ‹
         </button>
-        <div
-          id="homeSuggested"
-          className="suggested-strip"
-          ref={suggestedRef}
-          style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
-        >
+        <div id="homeSuggested" className="suggested-strip" ref={suggestedRef}>
           {suggested.map((profile) => (
             <HomeCard key={`suggested-${profile.id}`} profile={profile} compact />
           ))}
