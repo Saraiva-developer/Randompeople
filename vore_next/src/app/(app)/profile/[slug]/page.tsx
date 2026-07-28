@@ -8,6 +8,9 @@ import {
 } from "@/features/profiles/view";
 import { getPublicProfileBySlug } from "@/features/profiles/queries";
 import { ProfileTabsClient } from "@/features/profiles/profile-tabs-client";
+import { ProfileStoryAvatar } from "@/features/profiles/story-avatar";
+import { ProfileRatingButton } from "@/features/reviews/reviews-modal";
+import { getProfileReviews, getReviewerContext } from "@/features/reviews/queries";
 
 function getProfileTypeLabel(type: string) {
   return profileTypeOptions.find((option) => option.value === type)?.label ?? type;
@@ -23,14 +26,6 @@ function PinIcon() {
         strokeLinejoin="round"
       />
       <circle cx="12" cy="10" r="2.6" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path d="M10 1.6l2.47 5.24 5.77.75-4.19 4.03.99 5.76L10 14.87l-5.04 2.51.99-5.76-4.19-4.03 5.77-.75L10 1.6Z" />
     </svg>
   );
 }
@@ -147,6 +142,22 @@ export default async function PublicProfilePage({
   const rating = String(profileData.rating || "").trim();
   const about = String(profileData.about || profile.bio || "").trim();
 
+  const galleryData =
+    profileData.gallery && typeof profileData.gallery === "object" && !Array.isArray(profileData.gallery)
+      ? (profileData.gallery as Record<string, unknown>)
+      : {};
+  const explicitStories = Array.isArray(profileData.stories) ? profileData.stories : [];
+  const galleryPhotos = Array.isArray(galleryData.photos) ? galleryData.photos : [];
+  const stories = (explicitStories.length ? explicitStories : galleryPhotos)
+    .map((entry) => String(entry || "").trim())
+    .filter(Boolean)
+    .slice(0, 20);
+
+  const [reviews, reviewer] = await Promise.all([
+    getProfileReviews(profile.id),
+    getReviewerContext(profile.id, profile.user_id)
+  ]);
+
   return (
     <main className="page-shell">
       <section className="legacy-profile-shell">
@@ -162,14 +173,8 @@ export default async function PublicProfilePage({
             ⋮
           </Link>
 
-          <div className="profile-native-avatar-wrap">
-            {avatarImage ? (
-              <img className="profile-native-avatar" src={avatarImage} alt={profile.name} />
-            ) : (
-              <div className="profile-native-avatar placeholder">
-                {profile.name.slice(0, 1).toUpperCase()}
-              </div>
-            )}
+          <div className={`profile-native-avatar-wrap${stories.length ? " has-stories" : ""}`}>
+            <ProfileStoryAvatar avatar={avatarImage} name={profile.name} stories={stories} />
           </div>
 
           {badgeType === "promo" || badgeType === "novo" ? (
@@ -192,12 +197,12 @@ export default async function PublicProfilePage({
               <PinIcon />
               {profile.location || "Sem localizacao"}
             </span>
-            <span className="profile-native-meta-item">
-              <span className="profile-native-star">
-                <StarIcon />
-              </span>
-              {rating || "-"}
-            </span>
+            <ProfileRatingButton
+              profileId={profile.id}
+              fallbackRating={rating}
+              initialReviews={reviews}
+              reviewer={reviewer}
+            />
           </div>
 
           {socialItems.length ? (

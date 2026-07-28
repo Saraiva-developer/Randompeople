@@ -56,6 +56,35 @@ export interface Database {
           user_id?: string;
         };
       };
+      reviews: {
+        Row: {
+          comment: string | null;
+          created_at: string;
+          id: string;
+          profile_id: string;
+          rating: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          comment?: string | null;
+          created_at?: string;
+          id?: string;
+          profile_id: string;
+          rating: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          comment?: string | null;
+          created_at?: string;
+          id?: string;
+          profile_id?: string;
+          rating?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+      };
       password_resets: {
         Row: {
           created_at: string;
