@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ProfileRow } from "@/features/vore-shell/display";
 import {
   getBadgeType,
@@ -69,7 +69,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
   const [suggestedStep, setSuggestedStep] = useState(SUGGESTED_CARD_WIDTH + SUGGESTED_CARD_GAP);
   const lastComputedRef = useRef<{ width: number; step: number } | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const measureTarget = suggestedWrapRef.current?.parentElement;
     const strip = suggestedRef.current;
     if (!measureTarget || !strip) return;
