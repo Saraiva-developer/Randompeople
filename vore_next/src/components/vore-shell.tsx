@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// `guest: true` marks the items a signed-out visitor can actually use.
+// Everything else needs an account, so it stays hidden in guest mode.
 const navItems = [
   {
     href: "/",
     tab: "home",
     label: "Home",
+    guest: true,
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -25,6 +28,7 @@ const navItems = [
     href: "/explore",
     tab: "explore",
     label: "Explorar",
+    guest: true,
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="11" cy="11" r="6.25" fill="none" stroke="currentColor" strokeWidth="1.9" />
@@ -128,16 +132,22 @@ const navItems = [
 
 export function VoreShell({
   children,
-  rightRail
+  rightRail,
+  isAuthenticated = false
 }: {
   children: React.ReactNode;
   rightRail?: React.ReactNode;
+  isAuthenticated?: boolean;
 }) {
   const pathname = usePathname();
 
   if (pathname === "/edit-profile") {
     return <>{children}</>;
   }
+
+  const visibleNavItems = isAuthenticated
+    ? navItems
+    : navItems.filter((item) => "guest" in item && item.guest);
 
   return (
     <>
@@ -150,7 +160,7 @@ export function VoreShell({
           </div>
 
           <nav id="mainNav" className="main-nav notranslate" translate="no">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const isActive =
                 pathname === item.href ||
                 (item.href !== "/" && pathname.startsWith(item.href));
@@ -169,6 +179,12 @@ export function VoreShell({
                 </Link>
               );
             })}
+
+            {!isAuthenticated ? (
+              <Link href="/login" className="nav-login-btn">
+                Entrar
+              </Link>
+            ) : null}
           </nav>
         </header>
 

@@ -101,6 +101,18 @@ a {
   transition: all 0.16s ease;
 }
 
+.main-nav a.nav-login-btn {
+  border-color: var(--text);
+  background: var(--text);
+  color: #fff;
+}
+
+.main-nav a.nav-login-btn:hover {
+  border-color: #000;
+  background: #000;
+  color: #fff;
+}
+
 .main-nav .nav-btn-icon {
   display: inline-flex;
   align-items: center;

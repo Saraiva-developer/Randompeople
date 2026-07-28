@@ -6,6 +6,7 @@ import {
   getProfileData,
   getSocialItems
 } from "@/features/profiles/view";
+import { getCurrentUser } from "@/features/auth/session";
 import { getPublicProfileBySlug } from "@/features/profiles/queries";
 import { ProfileTabsClient } from "@/features/profiles/profile-tabs-client";
 import { ProfileStoryAvatar } from "@/features/profiles/story-avatar";
@@ -153,10 +154,12 @@ export default async function PublicProfilePage({
     .filter(Boolean)
     .slice(0, 20);
 
-  const [reviews, reviewer] = await Promise.all([
+  const [reviews, reviewer, viewer] = await Promise.all([
     getProfileReviews(profile.id),
-    getReviewerContext(profile.id, profile.user_id)
+    getReviewerContext(profile.id, profile.user_id),
+    getCurrentUser()
   ]);
+  const canEdit = !!viewer && viewer.id === profile.user_id;
 
   return (
     <main className="page-shell">
@@ -165,13 +168,15 @@ export default async function PublicProfilePage({
           <Link href="/" className="profile-top-circle profile-native-back" aria-label="Voltar">
             ‹
           </Link>
-          <Link
-            href="/edit-profile"
-            className="profile-top-circle profile-native-more"
-            aria-label="Opcoes"
-          >
-            ⋮
-          </Link>
+          {canEdit ? (
+            <Link
+              href="/edit-profile"
+              className="profile-top-circle profile-native-more"
+              aria-label="Editar perfil"
+            >
+              ⋮
+            </Link>
+          ) : null}
 
           <div className={`profile-native-avatar-wrap${stories.length ? " has-stories" : ""}`}>
             <ProfileStoryAvatar avatar={avatarImage} name={profile.name} stories={stories} />
