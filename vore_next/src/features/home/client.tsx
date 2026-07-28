@@ -86,8 +86,11 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
 
       // Measure against the strip's own left offset within the wrap, ignoring
       // our own applied width so this never feeds back into itself.
+      if (!cards.length) return;
+
       const available = measureTarget!.clientWidth;
-      const count = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
+      const fitCount = Math.max(1, Math.floor((available + SUGGESTED_CARD_GAP) / step));
+      const count = Math.min(fitCount, cards.length);
       const width = count * step - SUGGESTED_CARD_GAP;
 
       const last = lastComputedRef.current;
@@ -168,11 +171,7 @@ export function HomeClient({ profiles }: { profiles: ProfileRow[] }) {
       <div
         className="suggested-strip-wrap"
         ref={suggestedWrapRef}
-        style={
-          suggestedWidth
-            ? { width: suggestedWidth, maxWidth: "100%" }
-            : { visibility: "hidden" }
-        }
+        style={suggestedWidth ? { width: suggestedWidth, maxWidth: "100%" } : undefined}
       >
         <button
           type="button"

@@ -848,6 +848,7 @@ button.active {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-snap-type: x mandatory;
+  transition: width 0.15s ease;
 }
 
 .suggested-strip::-webkit-scrollbar {
