@@ -863,17 +863,17 @@ button.active {
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--text);
+  border: 1px solid #000;
+  background: #111827;
+  color: #fff;
   font-size: 18px;
   line-height: 1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
   z-index: 2;
 }
 
 .suggested-strip-arrow:hover {
-  background: #f1f5f9;
+  background: #000;
 }
 
 .suggested-strip-arrow-left {
