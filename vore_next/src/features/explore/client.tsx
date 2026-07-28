@@ -85,12 +85,34 @@ function inferCategoryKeys(profile: ProfileRow) {
   ) as string[];
 }
 
+function SearchIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+      <path d="m20 20-3.6-3.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function OptionsIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="9" cy="7" r="2.4" fill="#fff" stroke="currentColor" strokeWidth="2" />
+      <circle cx="15" cy="12" r="2.4" fill="#fff" stroke="currentColor" strokeWidth="2" />
+      <circle cx="7" cy="17" r="2.4" fill="#fff" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
 export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
   const [search, setSearch] = useState("");
   const [discovery, setDiscovery] = useState("all");
   const [sortBy, setSortBy] = useState("relevance");
   const [categories, setCategories] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(12);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [categorySearch, setCategorySearch] = useState("");
 
   const filtered = useMemo(() => {
     const searchText = normalize(search);
@@ -141,11 +163,30 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
 
   const visible = filtered.slice(0, visibleCount);
 
+  const hasActiveAdvanced = discovery !== "all" || categories.length > 0;
+  const categorySearchText = normalize(categorySearch);
+  const visibleCategoryOptions = CATEGORY_OPTIONS.filter(
+    (option) => !categorySearchText || normalize(option.label).includes(categorySearchText)
+  );
+
+  function clearAdvancedFilters() {
+    setDiscovery("all");
+    setCategories([]);
+    setVisibleCount(12);
+  }
+
+  function closeAdvanced() {
+    setShowAdvanced(false);
+    setCategorySearch("");
+  }
+
   return (
     <section className="explore-screen">
       <div className="explore-search-row">
         <div className="explore-search-box">
-          <span className="explore-search-icon">⌕</span>
+          <span className="explore-search-icon">
+            <SearchIcon size={17} />
+          </span>
           <input
             className="input explore-search-input"
             placeholder="Pesquisar perfis..."
@@ -155,27 +196,18 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
               setVisibleCount(12);
             }}
           />
-          <button className="explore-search-filter-btn" type="button">
-            ⚙
+          <button
+            className={`explore-search-filter-btn${showAdvanced || hasActiveAdvanced ? " is-active" : ""}`}
+            type="button"
+            aria-label="Filtros avancados"
+            onClick={() => setShowAdvanced((current) => !current)}
+          >
+            <OptionsIcon size={16} />
           </button>
         </div>
       </div>
 
-      <div className="explore-meta-row">
-        <span id="exploreMetaText" className="muted">
-          {filtered.length} resultados
-        </span>
-        <span id="exploreTrendText" className="muted">
-          Tendencia:{" "}
-          {filtered
-            .slice(0, 2)
-            .map((profile) => profile.name)
-            .join(" | ") || "Sem dados"}
-        </span>
-      </div>
-
       <div id="exploreSortRow" className="explore-sort-row">
-        <span className="explore-group-label">Ordenar</span>
         <div className="chips chips-scroll explore-sort-chips">
           {SORT_OPTIONS.map((option) => (
             <button
@@ -193,50 +225,156 @@ export function ExploreClient({ profiles }: { profiles: ProfileRow[] }) {
         </div>
       </div>
 
-      <div className="explore-filter-group">
-        <span className="explore-group-label">Filtrar</span>
-        <div id="exploreActiveFilters" className="explore-active-filters">
-          {DISCOVERY_OPTIONS.map((option) => (
+      <div className="explore-meta-row">
+        <span id="exploreMetaText" className="muted">
+          {filtered.length} resultados
+        </span>
+        <span id="exploreTrendText" className="muted">
+          Tendencia:{" "}
+          {filtered
+            .slice(0, 2)
+            .map((profile) => profile.name)
+            .join(" | ") || "Sem dados"}
+        </span>
+      </div>
+
+      {hasActiveAdvanced ? (
+        <div className="explore-active-filters-row">
+          {discovery !== "all" ? (
             <button
-              key={option.key}
               type="button"
-              className={`vore-chip-button${discovery === option.key ? " active" : ""}`}
+              className="explore-active-filter-chip"
               onClick={() => {
-                setDiscovery(option.key);
+                setDiscovery("all");
                 setVisibleCount(12);
               }}
             >
-              {option.label}
+              {DISCOVERY_OPTIONS.find((option) => option.key === discovery)?.label}
+              <span aria-hidden="true">×</span>
+            </button>
+          ) : null}
+          {categories.map((key) => (
+            <button
+              key={`active-${key}`}
+              type="button"
+              className="explore-active-filter-chip"
+              onClick={() => {
+                setCategories((current) => current.filter((entry) => entry !== key));
+                setVisibleCount(12);
+              }}
+            >
+              {CATEGORY_OPTIONS.find((option) => option.key === key)?.label || key}
+              <span aria-hidden="true">×</span>
             </button>
           ))}
         </div>
-      </div>
+      ) : null}
 
-      <div className="explore-filter-group">
-        <span className="explore-group-label">Categorias</span>
-        <div className="chips chips-scroll explore-category-chips">
-        {CATEGORY_OPTIONS.map((option) => {
-          const active = categories.includes(option.key);
-          return (
-            <button
-              key={option.key}
-              type="button"
-              className={`vore-chip-button${active ? " active" : ""}`}
-              onClick={() => {
-                setCategories((current) =>
-                  current.includes(option.key)
-                    ? current.filter((entry) => entry !== option.key)
-                    : [...current, option.key]
-                );
-                setVisibleCount(12);
-              }}
-            >
-              {option.label}
+      {showAdvanced ? (
+        <div className="explore-advanced-backdrop" onClick={closeAdvanced}>
+          <div
+            className="explore-advanced-sheet"
+            role="dialog"
+            aria-label="Filtros avancados"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="explore-advanced-header">
+              <h3>Filtros avancados</h3>
+              <div className="explore-advanced-header-actions">
+                <button type="button" className="explore-advanced-clear-btn" onClick={clearAdvancedFilters}>
+                  Limpar
+                </button>
+                <button
+                  type="button"
+                  className="explore-advanced-close-btn"
+                  aria-label="Fechar"
+                  onClick={closeAdvanced}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <div className="explore-advanced-body">
+              <span className="explore-group-label">Descoberta</span>
+              <div className="chips explore-advanced-chips">
+                {DISCOVERY_OPTIONS.map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    className={`vore-chip-button${discovery === option.key ? " active" : ""}`}
+                    onClick={() => {
+                      setDiscovery(option.key);
+                      setVisibleCount(12);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+
+              <span className="explore-group-label">Ordenar por</span>
+              <div className="chips explore-advanced-chips">
+                {SORT_OPTIONS.map((option) => (
+                  <button
+                    key={option.key}
+                    type="button"
+                    className={`vore-chip-button${sortBy === option.key ? " active" : ""}`}
+                    onClick={() => {
+                      setSortBy(option.key);
+                      setVisibleCount(12);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+
+              <span className="explore-group-label">Categorias</span>
+              <div className="explore-category-search-box">
+                <SearchIcon size={14} />
+                <input
+                  value={categorySearch}
+                  placeholder="Pesquisar categoria..."
+                  onChange={(event) => setCategorySearch(event.target.value)}
+                />
+              </div>
+              <div className="explore-category-list">
+                {visibleCategoryOptions.map((option) => {
+                  const active = categories.includes(option.key);
+                  return (
+                    <button
+                      key={option.key}
+                      type="button"
+                      className={`explore-category-row${active ? " is-active" : ""}`}
+                      onClick={() => {
+                        setCategories((current) =>
+                          current.includes(option.key)
+                            ? current.filter((entry) => entry !== option.key)
+                            : [...current, option.key]
+                        );
+                        setVisibleCount(12);
+                      }}
+                    >
+                      <span>{option.label}</span>
+                      <span className={`explore-category-check${active ? " is-checked" : ""}`}>
+                        {active ? "✓" : ""}
+                      </span>
+                    </button>
+                  );
+                })}
+                {!visibleCategoryOptions.length ? (
+                  <p className="muted explore-category-empty">Sem categorias para essa pesquisa.</p>
+                ) : null}
+              </div>
+            </div>
+
+            <button type="button" className="explore-advanced-done-btn" onClick={closeAdvanced}>
+              Aplicar
             </button>
-          );
-        })}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div id="exploreCards" className="grid">
         {visible.map((profile) => {
