@@ -1914,10 +1914,7 @@ button.active {
 }
 
 .edit-next-screen .edit-studio-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
-  gap: 12px;
-  align-items: start;
+  display: block;
 }
 
 .edit-next-screen .edit-root {
@@ -2091,50 +2088,35 @@ button.active {
   border-color: #cbd5e1;
 }
 
-.edit-next-screen .edit-studio-preview {
-  position: sticky;
-  top: 12px;
-  align-self: start;
-  min-width: 0;
-}
-
-.edit-next-screen .edit-studio-preview-sticky {
-  display: grid;
-  gap: 8px;
-  max-height: calc(100vh - 24px);
-}
-
-.edit-next-screen .edit-studio-preview-header h4 {
-  margin: 0;
-  color: #0f172a;
-}
-
-.edit-next-screen .edit-studio-preview-header p {
-  margin: 2px 0 0;
-}
-
-.edit-next-screen .edit-preview-profile-head {
-  grid-template-columns: 70px minmax(0, 1fr);
-  margin-top: 0;
-  align-items: center;
-}
-
-.edit-next-screen .edit-preview-profile-head .legacy-profile-avatar,
-.edit-next-screen .edit-preview-profile-head .legacy-profile-avatar-wrap {
-  width: 70px;
-  height: 70px;
-}
-
-.edit-next-screen .edit-preview-profile-head h1 {
-  font-size: 20px;
-}
-
 .edit-next-screen .edit-avatar-layout {
-  align-items: stretch;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .edit-next-screen .edit-avatar-preview {
+  flex: 0 0 auto;
   align-self: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: #e2e8f0;
+}
+
+.edit-next-screen .edit-avatar-preview.placeholder {
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #20324f;
+}
+
+.edit-next-screen .edit-avatar-actions {
+  flex: 1;
+  min-width: 260px;
 }
 
 .edit-next-screen .edit-avatar-actions {
@@ -4878,22 +4860,8 @@ button.active {
     grid-template-columns: 1fr;
   }
 
-  .edit-next-screen .edit-studio-layout {
+  .edit-next-screen .edit-avatar-actions {
     grid-template-columns: 1fr;
-  }
-
-  .edit-next-screen .edit-studio-preview {
-    display: none;
-  }
-
-  .content-editor-block-head,
-  .content-editor-card-head {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .content-editor-card-actions {
-    justify-content: flex-start;
   }
 
   .legacy-profile-head-main {

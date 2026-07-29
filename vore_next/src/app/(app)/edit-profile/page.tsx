@@ -83,15 +83,6 @@ export default async function EditProfilePage({
   const avatarValue = String(profile?.avatar_url || profileData.avatar || "").trim();
   const coverValue = String(profile?.cover_url || profileData.cover || "").trim();
   const profileInitial = String(profile?.name || "P").slice(0, 1).toUpperCase();
-  const tabLabels = [
-    "Sobre",
-    profile?.type === "shop" ? "Produtos" : profile?.type === "food" ? "Menu" : "Servicos",
-    "Galeria",
-    "Horario",
-    "Agenda",
-    "Parcerias",
-    "Localizacao"
-  ];
 
   return (
     <div id="edit" className="edit-next-screen">
@@ -412,49 +403,6 @@ export default async function EditProfilePage({
           </div>
           </section>
 
-          <section className="edit-section-card edit-tab-manager-section">
-            <div className="edit-tab-manager-header edit-section-header">
-              <h4 className="edit-section-title">Abas do perfil</h4>
-            </div>
-            <p className="muted">Ativa, desativa, remove e reordena as abas como na app.</p>
-            <div className="edit-tabs-create">
-              <p className="edit-tabs-subtitle">Adicionar nova aba</p>
-              <div className="edit-tab-add-row">
-                <select className="input" defaultValue="servicos" aria-label="Tipo da nova aba">
-                  <option value="servicos">Servicos</option>
-                  <option value="produtos">Produtos</option>
-                  <option value="menu">Menu</option>
-                  <option value="portfolio">Portfolio</option>
-                  <option value="campanhas">Campanhas</option>
-                  <option value="casas">Casas</option>
-                  <option value="quartos">Quartos</option>
-                </select>
-                <input className="input" placeholder="Nome da nova aba (opcional)" />
-                <button type="button" className="edit-primary-action">+ Adicionar aba</button>
-              </div>
-            </div>
-            <div className="edit-tabs-divider" aria-hidden="true" />
-            <div className="edit-tabs-existing">
-              <div className="edit-tabs-existing-head">
-                <p className="edit-tabs-subtitle">Abas ja adicionadas</p>
-                <div className="chips edit-tab-manager-move">
-                  <button type="button" aria-label="Mover para cima">↑</button>
-                  <button type="button" aria-label="Mover para baixo">↓</button>
-                </div>
-              </div>
-              <div className="edit-tab-manager-list">
-                {tabLabels.map((label, index) => (
-                  <div className={`edit-tab-manager-item${index === 0 ? " active" : ""}`} key={label}>
-                    <span className="edit-drag-handle" aria-hidden="true">⋮⋮</span>
-                    <button type="button" className="edit-tab-manager-select">{label}</button>
-                    <button type="button" className="edit-tab-icon-btn" aria-label="Mostrar aba">Ver</button>
-                    <button type="button" className="edit-tab-icon-btn is-danger" aria-label="Remover aba">X</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
           <ProfileContentEditor kinds={editorKinds} initialState={editorState} />
 
           <section className="edit-section-card">
@@ -562,55 +510,6 @@ export default async function EditProfilePage({
           </div>
           </form>
         </div>
-        <aside className="edit-studio-preview">
-          <div className="edit-studio-preview-sticky">
-            <div className="edit-studio-preview-header">
-              <h4>Preview</h4>
-              <p className="muted">Aparencia publica aproximada.</p>
-            </div>
-            <div className="edit-studio-preview-shell">
-              <div className="edit-preview-shell">
-                <div className="edit-preview-head">
-                  <div className="legacy-profile-head-main edit-preview-profile-head">
-                    <div className="legacy-profile-avatar-wrap">
-                      {avatarValue ? (
-                        <img className="legacy-profile-avatar" src={avatarValue} alt={profile?.name || "Perfil"} />
-                      ) : (
-                        <div className="legacy-profile-avatar placeholder">{profileInitial}</div>
-                      )}
-                    </div>
-                    <div className="legacy-profile-main-copy">
-                      <div className="legacy-profile-name-row">
-                        <h1>{profile?.name || "Perfil"}</h1>
-                      </div>
-                      <p className="legacy-profile-category">
-                        {String(profileData.category || profileData.role || "Servicos")}
-                      </p>
-                      <div className="legacy-profile-meta-row">
-                        <span className="legacy-profile-pill">{profile?.location || "Portugal"}</span>
-                        {profileData.rating ? (
-                          <span className="legacy-profile-pill">★ {String(profileData.rating)}</span>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="chips edit-preview-tabs">
-                  {tabLabels.map((label, index) => (
-                    <button className={index === 0 ? "active" : ""} type="button" key={label}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-                <div className="panel edit-preview-content">
-                  <p className="edit-preview-about-summary">
-                    {String(profileData.aboutSummary || profile?.bio || "Sem descricao ainda.")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   );
