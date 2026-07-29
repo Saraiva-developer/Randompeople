@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Route } from "next";
 import { getCurrentUser } from "@/features/auth/session";
+import {
+  FLAT_DATA_KEY,
+  SECTIONS_DATA_KEY,
+  writeSections
+} from "@/features/profiles/editor-model";
+import type { ContentKind, EditorSection, EditorTab } from "@/features/profiles/editor-model";
 import { slugify } from "@/features/profiles/helpers";
 import { getSupabaseServerClient } from "@/lib/supabase";
 import type { ProfileType } from "@/types/domain";
@@ -102,6 +108,51 @@ function readField(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
+/**
+ * The content editor posts its whole state as one JSON field. Everything it
+ * owns (tabs plus the `*Sections` payloads) is rebuilt from that, so the older
+ * line-based fields are only used for the parts it does not manage.
+ */
+function readEditorState(formData: FormData) {
+  const raw = readField(formData, "editorState");
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw) as {
+      tabs?: EditorTab[];
+      content?: Partial<Record<ContentKind, EditorSection[]>>;
+    };
+    if (!parsed || typeof parsed !== "object") return null;
+
+    const tabs = Array.isArray(parsed.tabs) ? parsed.tabs : [];
+    const content = parsed.content && typeof parsed.content === "object" ? parsed.content : {};
+
+    const payload: Record<string, Json> = {};
+    if (tabs.length) {
+      payload.tabs = tabs.map((tab) => ({
+        id: String(tab.id || ""),
+        type: String(tab.type || tab.id || ""),
+        label: String(tab.label || ""),
+        enabled: tab.enabled !== false
+      }));
+    }
+
+    (Object.keys(content) as ContentKind[]).forEach((kind) => {
+      if (!SECTIONS_DATA_KEY[kind]) return;
+      const sections = writeSections(content[kind] || [], kind);
+      payload[SECTIONS_DATA_KEY[kind]] = sections as unknown as Json;
+      // Keep the flat mirror in sync for older readers.
+      payload[FLAT_DATA_KEY[kind]] = sections.flatMap(
+        (section) => section.items
+      ) as unknown as Json;
+    });
+
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 function redirectWithMessage(path: "/edit-profile", message: string) {
   const params = new URLSearchParams({ message });
   redirect(`${path}?${params.toString()}` as Route);
@@ -142,6 +193,7 @@ export async function saveProfileAction(formData: FormData) {
   const housesLines = readLines(formData, "houses");
   const roomsLines = readLines(formData, "rooms");
   const campaignsLines = readLines(formData, "campaigns");
+  const editorPayload = readEditorState(formData);
 
   if (!rawName || !type) {
     redirectWithMessage("/edit-profile", "Preenche pelo menos nome e tipo de perfil.");
@@ -199,13 +251,15 @@ export async function saveProfileAction(formData: FormData) {
     },
     partners: parsePartnerLines(partnerLines),
     locations: parseLocationLines(locationLines),
-    services: parseContentItemLines(servicesLines),
-    products: parseContentItemLines(productsLines),
-    menu: parseContentItemLines(menuLines),
-    portfolio: parseContentItemLines(portfolioLines),
-    houses: parseContentItemLines(housesLines),
-    rooms: parseContentItemLines(roomsLines),
-    campaigns: parseContentItemLines(campaignsLines)
+    ...(editorPayload || {
+      services: parseContentItemLines(servicesLines),
+      products: parseContentItemLines(productsLines),
+      menu: parseContentItemLines(menuLines),
+      portfolio: parseContentItemLines(portfolioLines),
+      houses: parseContentItemLines(housesLines),
+      rooms: parseContentItemLines(roomsLines),
+      campaigns: parseContentItemLines(campaignsLines)
+    })
   };
 
   const payload: Database["public"]["Tables"]["profiles"]["Insert"] = {

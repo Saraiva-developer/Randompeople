@@ -4,9 +4,16 @@ import { getCurrentUser } from "@/features/auth/session";
 import { saveProfileAction } from "@/features/profiles/actions";
 import { ProfileContentEditor } from "@/features/profiles/content-editor";
 import { profileTypeOptions } from "@/features/profiles/constants";
+import {
+  FLAT_DATA_KEY,
+  KINDS_BY_TYPE,
+  SECTIONS_DATA_KEY,
+  readSections
+} from "@/features/profiles/editor-model";
 import { getProfileByUserId } from "@/features/profiles/queries";
 import { getCurrentAccount } from "@/features/vore-shell/queries";
-import { getProfileData } from "@/features/profiles/view";
+import { getProfileData, getTabsForProfile } from "@/features/profiles/view";
+import type { ProfileType } from "@/types/domain";
 import type { Json } from "@/types/supabase";
 
 function asRecord(value: Json | null | undefined) {
@@ -57,6 +64,22 @@ export default async function EditProfilePage({
     searchParams
   ]);
   const profileData = getProfileData(profile?.data);
+  const profileType = (profile?.type ?? "service_pro") as ProfileType;
+  const editorKinds = KINDS_BY_TYPE[profileType] || KINDS_BY_TYPE.service_pro;
+  const editorState = {
+    tabs: getTabsForProfile(profileType, profileData).map((tab) => ({
+      id: tab.id,
+      type: String(tab.type || tab.id),
+      label: tab.label,
+      enabled: tab.enabled !== false
+    })),
+    content: Object.fromEntries(
+      editorKinds.map((kind) => [
+        kind,
+        readSections(profileData[SECTIONS_DATA_KEY[kind]], profileData[FLAT_DATA_KEY[kind]], kind)
+      ])
+    )
+  };
   const avatarValue = String(profile?.avatar_url || profileData.avatar || "").trim();
   const coverValue = String(profile?.cover_url || profileData.cover || "").trim();
   const profileInitial = String(profile?.name || "P").slice(0, 1).toUpperCase();
@@ -432,52 +455,7 @@ export default async function EditProfilePage({
             </div>
           </section>
 
-          <ProfileContentEditor
-            blocks={[
-              {
-                name: "services",
-                label: "Servicos",
-                placeholder: "Massagem relaxante",
-                initialLines: formatContentLines(profileData.services)
-              },
-              {
-                name: "products",
-                label: "Produtos",
-                placeholder: "Produto premium",
-                initialLines: formatContentLines(profileData.products)
-              },
-              {
-                name: "menu",
-                label: "Menu",
-                placeholder: "Prato do dia",
-                initialLines: formatContentLines(profileData.menu)
-              },
-              {
-                name: "portfolio",
-                label: "Portfolio",
-                placeholder: "Projeto",
-                initialLines: formatContentLines(profileData.portfolio)
-              },
-              {
-                name: "houses",
-                label: "Casas",
-                placeholder: "Casa T2",
-                initialLines: formatContentLines(profileData.houses)
-              },
-              {
-                name: "rooms",
-                label: "Quartos",
-                placeholder: "Quarto duplo",
-                initialLines: formatContentLines(profileData.rooms)
-              },
-              {
-                name: "campaigns",
-                label: "Campanhas",
-                placeholder: "Campanha de primavera",
-                initialLines: formatContentLines(profileData.campaigns)
-              }
-            ]}
-          />
+          <ProfileContentEditor kinds={editorKinds} initialState={editorState} />
 
           <section className="edit-section-card">
             <div className="edit-section-header">

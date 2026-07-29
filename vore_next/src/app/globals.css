@@ -4112,6 +4112,206 @@ button.active {
   font-weight: 800;
 }
 
+/* ---- profile content editor ---- */
+
+.ced-section {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.ced-section.is-off,
+.ced-item.is-off,
+.ced-tab-row.is-off {
+  opacity: 0.6;
+}
+
+.ced-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.ced-section-name {
+  flex: 1;
+  min-width: 160px;
+  max-width: none;
+  font-weight: 700;
+}
+
+.ced-section-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ced-section-actions button {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.ced-section-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ced-danger {
+  border-color: #fecaca !important;
+  color: #b91c1c;
+}
+
+.ced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.ced-toggle input {
+  width: 15px;
+  height: 15px;
+  accent-color: #0f172a;
+}
+
+.ced-items {
+  display: grid;
+  gap: 8px;
+}
+
+.ced-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ced-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+}
+
+.ced-item-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ced-item-caret {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.ced-item-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ced-item-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ced-item-actions button {
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 11.5px;
+}
+
+.ced-item-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ced-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  padding: 4px 10px 12px;
+  border-top: 1px solid #eef2f7;
+}
+
+.ced-field-full {
+  grid-column: 1 / -1;
+}
+
+.ced-fields .ced-field span {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.ced-fields .input {
+  max-width: none;
+}
+
+.ced-fields .ced-toggle {
+  align-self: end;
+  padding-bottom: 8px;
+}
+
+.ced-add-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border-style: dashed;
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.ced-add-section {
+  width: 100%;
+}
+
+.ced-tabs-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ced-tab-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ced-tab-label {
+  flex: 1;
+  min-width: 150px;
+  max-width: none;
+}
+
 /* ---- reviews modal ---- */
 
 .rvw-trigger {
