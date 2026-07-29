@@ -3970,6 +3970,134 @@ button.active {
   color: #64748b;
 }
 
+.pnt-modal-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.pnt-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: var(--text);
+}
+
+.pnt-icon-btn:hover {
+  background: #e2e8f0;
+}
+
+.pnt-icon-btn.is-saved {
+  border-color: var(--text);
+  background: var(--text);
+  color: #fff;
+}
+
+.pnt-lightbox-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.pnt-lightbox-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+}
+
+.pnt-lightbox-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.pnt-lightbox-btn.is-saved {
+  background: #fff;
+  color: #0f172a;
+}
+
+.ppf-saved-subtabs {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.ppf-subtab-count {
+  margin-left: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.pnt-subtab.is-active .ppf-subtab-count {
+  color: #0f172a;
+}
+
+.ppf-preview-link {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+
+.ppf-preview-link:hover {
+  color: #fff;
+}
+
+.shr-entry-wrap {
+  display: grid;
+  gap: 4px;
+}
+
+.shr-reactions {
+  display: flex;
+  gap: 4px;
+  padding-left: 2px;
+}
+
+.shr-reaction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 13px;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.6;
+  transition: filter 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+
+.shr-reaction:hover {
+  filter: grayscale(0);
+  opacity: 1;
+  background: #f1f5f9;
+}
+
+.shr-reaction.is-active {
+  filter: grayscale(0);
+  opacity: 1;
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
 .ppf-tab-badge {
   display: inline-grid;
   place-items: center;

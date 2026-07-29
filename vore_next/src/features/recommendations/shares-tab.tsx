@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { respondToPermissionAction } from "@/features/recommendations/actions";
-import { ITEM_KIND_LABELS } from "@/features/recommendations/shared";
+import { reactToShareAction, respondToPermissionAction } from "@/features/recommendations/actions";
+import { ITEM_KIND_LABELS, REACTIONS } from "@/features/recommendations/shared";
 import type {
   PermissionRequest,
+  ReactionKey,
   ShareConversation,
   ShareEntry
 } from "@/features/recommendations/shared";
@@ -38,6 +39,37 @@ function PersonIcon({ size = 13 }: { size?: number }) {
   );
 }
 
+function ReactionRow({ entry }: { entry: ShareEntry }) {
+  const [current, setCurrent] = useState<ReactionKey | null>(entry.myReaction);
+  const [, startTransition] = useTransition();
+
+  function pick(key: ReactionKey) {
+    const next = current === key ? null : key;
+    setCurrent(next);
+    startTransition(async () => {
+      const result = await reactToShareAction(entry.id, next);
+      if (!result.ok) setCurrent(current);
+    });
+  }
+
+  return (
+    <div className="shr-reactions">
+      {REACTIONS.map((reaction) => (
+        <button
+          key={reaction.key}
+          type="button"
+          className={`shr-reaction${current === reaction.key ? " is-active" : ""}`}
+          aria-label={reaction.key}
+          aria-pressed={current === reaction.key}
+          onClick={() => pick(reaction.key)}
+        >
+          {reaction.emoji}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function ShareEntryCard({ entry }: { entry: ShareEntry }) {
   const expired = isExpired(entry);
   const kindLabel = entry.item ? ITEM_KIND_LABELS[entry.item.kind] || "Item" : "Perfil";
@@ -66,19 +98,26 @@ function ShareEntryCard({ entry }: { entry: ShareEntry }) {
     </>
   );
 
-  if (expired || !entry.profileSlug) {
-    return (
+  const card =
+    expired || !entry.profileSlug ? (
       <div className="shr-entry is-expired">
         {body}
         {expired ? <span className="shr-expired-tag">Expirou</span> : null}
       </div>
+    ) : (
+      <Link href={`/profile/${entry.profileSlug}`} className="shr-entry">
+        {body}
+      </Link>
     );
-  }
+
+  // Only the receiver reacts, matching the app.
+  if (entry.direction !== "received") return card;
 
   return (
-    <Link href={`/profile/${entry.profileSlug}`} className="shr-entry">
-      {body}
-    </Link>
+    <div className="shr-entry-wrap">
+      {card}
+      <ReactionRow entry={entry} />
+    </div>
   );
 }
 

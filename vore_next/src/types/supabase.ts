@@ -218,6 +218,35 @@ export interface Database {
           source_profile_name?: string | null;
         };
       };
+      saved_entries: {
+        Row: {
+          created_at: string;
+          data: Json;
+          entry_key: string;
+          id: string;
+          kind: "media" | "item";
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          data?: Json;
+          entry_key: string;
+          id?: string;
+          kind: "media" | "item";
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          data?: Json;
+          entry_key?: string;
+          id?: string;
+          kind?: "media" | "item";
+          updated_at?: string;
+          user_id?: string;
+        };
+      };
       saved_profiles: {
         Row: {
           created_at: string;

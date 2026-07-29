@@ -149,6 +149,42 @@ export async function sendShareAction(input: {
   return { ok: true, status: "sent" };
 }
 
+export async function reactToShareAction(
+  recommendationId: number,
+  reaction: string | null
+): Promise<{ ok: boolean }> {
+  const user = await getCommonUser();
+  if (!user || !recommendationId) return { ok: false };
+
+  const supabase = await getSupabaseServerClient();
+
+  if (!reaction) {
+    const { error } = await supabase
+      .from("recommendation_reactions")
+      .delete()
+      .eq("recommendation_id", recommendationId)
+      .eq("user_id", user.id);
+    if (error) return { ok: false };
+    revalidatePath("/profile");
+    return { ok: true };
+  }
+
+  const reactionsTable = supabase.from("recommendation_reactions") as unknown as {
+    upsert: (
+      values: { recommendation_id: number; user_id: string; reaction: string },
+      options: { onConflict: string }
+    ) => Promise<{ error: { message: string } | null }>;
+  };
+  const { error } = await reactionsTable.upsert(
+    { recommendation_id: recommendationId, user_id: user.id, reaction },
+    { onConflict: "recommendation_id,user_id" }
+  );
+  if (error) return { ok: false };
+
+  revalidatePath("/profile");
+  return { ok: true };
+}
+
 export async function respondToPermissionAction(
   senderUserId: string,
   action: "approve" | "reject"

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { SharesTab } from "@/features/recommendations/shares-tab";
+import { ITEM_KIND_LABELS } from "@/features/recommendations/shared";
 import type { PermissionRequest, ShareConversation } from "@/features/recommendations/shared";
+import type { SavedItemEntry, SavedMediaEntry } from "@/features/saved/entries";
 import type { ProfileRow } from "@/features/vore-shell/queries";
 import { getBadgeType, getCardDisplayData, resolveProfileFilter } from "@/features/vore-shell/display";
 
@@ -58,7 +60,9 @@ export function PersonalProfileClient({
   savedProfiles,
   profiles,
   conversations,
-  permissionRequests
+  permissionRequests,
+  savedMedia,
+  savedItems
 }: {
   name: string;
   email: string;
@@ -66,8 +70,12 @@ export function PersonalProfileClient({
   profiles: ProfileRow[];
   conversations: ShareConversation[];
   permissionRequests: PermissionRequest[];
+  savedMedia: SavedMediaEntry[];
+  savedItems: SavedItemEntry[];
 }) {
   const [tab, setTab] = useState<"shares" | "saved" | "recent" | "alerts">("saved");
+  const [savedSubTab, setSavedSubTab] = useState<"profiles" | "media" | "items">("profiles");
+  const [mediaPreview, setMediaPreview] = useState<SavedMediaEntry | null>(null);
   const [savedQuery, setSavedQuery] = useState("");
   const [savedLimit, setSavedLimit] = useState(PAGE_SIZE);
   const [recentIds, setRecentIds] = useState<string[]>([]);
@@ -170,46 +178,138 @@ export function PersonalProfileClient({
         ) : null}
 
         {tab === "saved" ? (
-          !savedProfiles.length ? (
-            <EmptyState
-              text="Ainda não guardaste perfis."
-              ctaLabel="Descobrir perfis"
-            />
-          ) : (
-            <>
-              <input
-                className="input ppf-search"
-                placeholder="Pesquisar perfis guardados..."
-                value={savedQuery}
-                onChange={(event) => setSavedQuery(event.target.value)}
-              />
-              {!filteredSaved.length ? (
-                <p className="muted ppf-hint">Nenhum perfil encontrado.</p>
+          <>
+            <div className="pnt-subtabs ppf-saved-subtabs">
+              {(
+                [
+                  ["profiles", "Perfis", savedProfiles.length],
+                  ["media", "Fotos e vídeos", savedMedia.length],
+                  ["items", "Itens", savedItems.length]
+                ] as const
+              ).map(([key, label, count]) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`pnt-subtab${savedSubTab === key ? " is-active" : ""}`}
+                  onClick={() => setSavedSubTab(key)}
+                >
+                  {label}
+                  {count ? <span className="ppf-subtab-count">{count}</span> : null}
+                </button>
+              ))}
+            </div>
+
+            {savedSubTab === "profiles" ? (
+              !savedProfiles.length ? (
+                <EmptyState text="Ainda não guardaste perfis." ctaLabel="Descobrir perfis" />
               ) : (
                 <>
-                  <div className="grid">
-                    {visibleSaved.map((profile) => (
-                      <MiniCard key={`saved-${profile.id}`} profile={profile} />
-                    ))}
-                  </div>
-                  {visibleSaved.length < filteredSaved.length ? (
-                    <div className="vore-load-more-row">
-                      <span className="muted">
-                        A mostrar {visibleSaved.length} de {filteredSaved.length}
-                      </span>
-                      <button
-                        type="button"
-                        className="secondary-button"
-                        onClick={() => setSavedLimit((count) => count + PAGE_SIZE)}
-                      >
-                        Mostrar mais
-                      </button>
-                    </div>
-                  ) : null}
+                  <input
+                    className="input ppf-search"
+                    placeholder="Pesquisar perfis guardados..."
+                    value={savedQuery}
+                    onChange={(event) => setSavedQuery(event.target.value)}
+                  />
+                  {!filteredSaved.length ? (
+                    <p className="muted ppf-hint">Nenhum perfil encontrado.</p>
+                  ) : (
+                    <>
+                      <div className="grid">
+                        {visibleSaved.map((profile) => (
+                          <MiniCard key={`saved-${profile.id}`} profile={profile} />
+                        ))}
+                      </div>
+                      {visibleSaved.length < filteredSaved.length ? (
+                        <div className="vore-load-more-row">
+                          <span className="muted">
+                            A mostrar {visibleSaved.length} de {filteredSaved.length}
+                          </span>
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() => setSavedLimit((count) => count + PAGE_SIZE)}
+                          >
+                            Mostrar mais
+                          </button>
+                        </div>
+                      ) : null}
+                    </>
+                  )}
                 </>
-              )}
-            </>
-          )
+              )
+            ) : null}
+
+            {savedSubTab === "media" ? (
+              !savedMedia.length ? (
+                <EmptyState text="Ainda não guardaste fotos nem vídeos." ctaLabel="Descobrir perfis" />
+              ) : (
+                <div className="pnt-media-grid">
+                  {savedMedia.map((entry) => (
+                    <button
+                      key={entry.key}
+                      type="button"
+                      className={`pnt-media-tile${entry.type === "video" ? " pnt-media-tile-video" : ""}`}
+                      onClick={() => setMediaPreview(entry)}
+                    >
+                      {entry.type === "video" ? (
+                        <>
+                          <span className="pnt-media-video-badge">VIDEO</span>
+                          <span className="pnt-media-video-label">{entry.profileName || "Vídeo"}</span>
+                        </>
+                      ) : (
+                        <img src={entry.uri} alt={entry.profileName || "Foto guardada"} loading="lazy" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )
+            ) : null}
+
+            {savedSubTab === "items" ? (
+              !savedItems.length ? (
+                <EmptyState text="Ainda não guardaste itens." ctaLabel="Descobrir perfis" />
+              ) : (
+                <div className="pnt-list">
+                  {savedItems.map((entry) => {
+                    const body = (
+                      <>
+                        {entry.image ? (
+                          <img src={entry.image} alt="" className="pnt-thumb shr-entry-thumb" />
+                        ) : null}
+                        <span className="shr-entry-main">
+                          <span className="shr-entry-kind">
+                            {ITEM_KIND_LABELS[entry.kind] || "Item"}
+                            {entry.section ? ` · ${entry.section}` : ""}
+                          </span>
+                          <span className="shr-entry-title">{entry.name || "Item"}</span>
+                          {entry.profileName ? (
+                            <span className="shr-entry-sub">em {entry.profileName}</span>
+                          ) : null}
+                          {entry.price ? (
+                            <span className="pnt-promo-row">
+                              <span className="pnt-promo-now">{entry.price}</span>
+                              {entry.oldPrice ? (
+                                <span className="pnt-promo-old">{entry.oldPrice}</span>
+                              ) : null}
+                            </span>
+                          ) : null}
+                        </span>
+                      </>
+                    );
+                    return entry.profileSlug ? (
+                      <Link key={entry.key} href={`/profile/${entry.profileSlug}`} className="shr-entry">
+                        {body}
+                      </Link>
+                    ) : (
+                      <div key={entry.key} className="shr-entry is-expired">
+                        {body}
+                      </div>
+                    );
+                  })}
+                </div>
+              )
+            ) : null}
+          </>
         ) : null}
 
         {tab === "recent" ? (
@@ -269,6 +369,39 @@ export function PersonalProfileClient({
           </div>
         ) : null}
       </div>
+
+      {mediaPreview ? (
+        <div className="pnt-lightbox-backdrop" onClick={() => setMediaPreview(null)}>
+          <div className="pnt-lightbox-actions" onClick={(event) => event.stopPropagation()}>
+            <button
+              type="button"
+              className="pnt-lightbox-btn"
+              aria-label="Fechar"
+              onClick={() => setMediaPreview(null)}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 6 12 12M18 6 6 18" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <div className="pnt-lightbox-stage" onClick={(event) => event.stopPropagation()}>
+            {mediaPreview.type === "video" ? (
+              <video className="pnt-lightbox-media" src={mediaPreview.uri} controls autoPlay />
+            ) : (
+              <img className="pnt-lightbox-media" src={mediaPreview.uri} alt={mediaPreview.profileName} />
+            )}
+            <span className="pnt-lightbox-legend">
+              {mediaPreview.profileSlug ? (
+                <Link href={`/profile/${mediaPreview.profileSlug}`} className="ppf-preview-link">
+                  {mediaPreview.profileName || "Ver perfil"}
+                </Link>
+              ) : (
+                mediaPreview.profileName
+              )}
+            </span>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

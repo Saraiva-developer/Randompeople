@@ -4,7 +4,7 @@ import {
   getPendingPermissionRequests,
   getShareConversations
 } from "@/features/recommendations/queries";
-import { getSavedProfiles } from "@/features/saved/queries";
+import { getSavedEntries, getSavedProfiles } from "@/features/saved/queries";
 import {
   getCurrentAccount,
   getCurrentOwnedProfile,
@@ -21,12 +21,14 @@ export default async function OwnProfilePage() {
   // Personal ("common") accounts have no public profile of their own; like the
   // native app they get the saved/recent/alerts screen instead.
   if (account.account_type === "common") {
-    const [savedProfiles, profiles, conversations, permissionRequests] = await Promise.all([
-      getSavedProfiles(),
-      getPublishedProfiles(160),
-      getShareConversations(),
-      getPendingPermissionRequests()
-    ]);
+    const [savedProfiles, profiles, conversations, permissionRequests, savedEntries] =
+      await Promise.all([
+        getSavedProfiles(),
+        getPublishedProfiles(160),
+        getShareConversations(),
+        getPendingPermissionRequests(),
+        getSavedEntries()
+      ]);
 
     return (
       <PersonalProfileClient
@@ -36,6 +38,8 @@ export default async function OwnProfilePage() {
         profiles={profiles}
         conversations={conversations}
         permissionRequests={permissionRequests}
+        savedMedia={savedEntries.media}
+        savedItems={savedEntries.items}
       />
     );
   }

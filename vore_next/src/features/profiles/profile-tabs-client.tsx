@@ -4,6 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import type { ProfileType } from "@/types/domain";
 import type { Json } from "@/types/supabase";
 import { getProfileData, getTabsForProfile } from "@/features/profiles/view";
+import { ShareButton } from "@/features/recommendations/share-modal";
+import { buildItemShareUri } from "@/features/recommendations/shared";
+import { SaveEntryButton } from "@/features/saved/save-entry-button";
+import { itemEntryKey, mediaEntryKey } from "@/features/saved/entries";
 
 type Item = Record<string, unknown>;
 
@@ -271,13 +275,25 @@ export function ProfileTabsClient({
   profileType,
   data,
   about,
-  initialTab
+  initialTab,
+  profileId = "",
+  profileSlug = "",
+  profileName = "",
+  canInteract = false,
+  savedEntryKeys = []
 }: {
   profileType: ProfileType;
   data: Json | null;
   about: string;
   initialTab?: string;
+  /** Sharing/saving of items and media is a personal-account feature. */
+  profileId?: string;
+  profileSlug?: string;
+  profileName?: string;
+  canInteract?: boolean;
+  savedEntryKeys?: string[];
 }) {
+  const savedKeys = useMemo(() => new Set(savedEntryKeys), [savedEntryKeys]);
   const profileData = useMemo(() => getProfileData(data), [data]);
   const tabs = useMemo(
     () => getTabsForProfile(profileType, profileData),
@@ -1087,9 +1103,49 @@ export function ProfileTabsClient({
               {sectionLabel ? <span className="pnt-modal-section">{sectionLabel}</span> : null}
               <h4 className="pnt-modal-title">{title}</h4>
             </div>
-            <button type="button" className="pnt-modal-close" aria-label="Fechar" onClick={() => setItemModal(null)}>
-              <Icon path={ICONS.close} size={15} color="#fff" />
-            </button>
+            <div className="pnt-modal-actions">
+              {canInteract ? (
+                <>
+                  <ShareButton
+                    profileId={profileId}
+                    profileSlug={profileSlug}
+                    profileName={profileName}
+                    subject="item"
+                    className="pnt-icon-btn"
+                    contentUri={buildItemShareUri({
+                      kind: kind === "product" ? "product" : kind,
+                      section: sectionLabel,
+                      name: title,
+                      price: promo.show ? promo.now : price,
+                      oldPrice: promo.old,
+                      time: str(item.time),
+                      note: longDescription,
+                      image: images[0] || ""
+                    })}
+                  />
+                  <SaveEntryButton
+                    kind="item"
+                    subject="item"
+                    entryKey={itemEntryKey(profileSlug, kind, sectionLabel, title)}
+                    initialSaved={savedKeys.has(itemEntryKey(profileSlug, kind, sectionLabel, title))}
+                    data={{
+                      kind,
+                      section: sectionLabel,
+                      name: title,
+                      note: longDescription,
+                      price: promo.show ? promo.now : price,
+                      oldPrice: promo.old,
+                      image: images[0] || "",
+                      profileName,
+                      profileSlug
+                    }}
+                  />
+                </>
+              ) : null}
+              <button type="button" className="pnt-modal-close" aria-label="Fechar" onClick={() => setItemModal(null)}>
+                <Icon path={ICONS.close} size={15} color="#fff" />
+              </button>
+            </div>
           </div>
 
           {showImage && images.length ? (
@@ -1188,9 +1244,37 @@ export function ProfileTabsClient({
     const legend = `${isVideo ? "Vídeo" : "Foto"} ${safeIndex + 1}/${total}`;
     return (
       <div className="pnt-lightbox-backdrop" onClick={() => setLightbox(null)}>
-        <button type="button" className="pnt-lightbox-close" aria-label="Fechar" onClick={() => setLightbox(null)}>
-          <Icon path={ICONS.close} size={18} color="#fff" />
-        </button>
+        <div className="pnt-lightbox-actions" onClick={(event) => event.stopPropagation()}>
+          {canInteract ? (
+            <>
+              <ShareButton
+                profileId={profileId}
+                profileSlug={profileSlug}
+                profileName={profileName}
+                subject={isVideo ? "vídeo" : "foto"}
+                className="pnt-lightbox-btn"
+                contentType={isVideo ? "video" : "photo"}
+                contentUri={current}
+              />
+              <SaveEntryButton
+                kind="media"
+                subject={isVideo ? "vídeo" : "foto"}
+                className="pnt-lightbox-btn"
+                entryKey={mediaEntryKey(profileSlug, current)}
+                initialSaved={savedKeys.has(mediaEntryKey(profileSlug, current))}
+                data={{
+                  type: isVideo ? "video" : "photo",
+                  uri: current,
+                  profileName,
+                  profileSlug
+                }}
+              />
+            </>
+          ) : null}
+          <button type="button" className="pnt-lightbox-btn" aria-label="Fechar" onClick={() => setLightbox(null)}>
+            <Icon path={ICONS.close} size={18} color="#fff" />
+          </button>
+        </div>
         <div className="pnt-lightbox-stage" onClick={(event) => event.stopPropagation()}>
           {isVideo ? (
             <video key={current} className="pnt-lightbox-media" controls autoPlay src={current} />

@@ -15,6 +15,15 @@ export type ShareItemPayload = {
   image: string;
 };
 
+export const REACTIONS = [
+  { key: "like", emoji: "👍" },
+  { key: "fire", emoji: "🔥" },
+  { key: "wow", emoji: "😮" },
+  { key: "love", emoji: "❤️" }
+] as const;
+
+export type ReactionKey = (typeof REACTIONS)[number]["key"];
+
 export type ShareEntry = {
   id: number;
   direction: "received" | "sent";
@@ -25,6 +34,8 @@ export type ShareEntry = {
   createdAt: string;
   expiresAt: string;
   item: ShareItemPayload | null;
+  /** Reaction the viewer left on this share, if any. */
+  myReaction: ReactionKey | null;
 };
 
 export type ShareConversation = {

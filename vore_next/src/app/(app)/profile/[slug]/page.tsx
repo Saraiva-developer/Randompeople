@@ -8,8 +8,8 @@ import {
 } from "@/features/profiles/view";
 import { getCurrentUser } from "@/features/auth/session";
 import { getPublicProfileBySlug } from "@/features/profiles/queries";
-import { ShareProfileButton } from "@/features/recommendations/share-modal";
-import { isProfileSaved } from "@/features/saved/queries";
+import { ShareButton } from "@/features/recommendations/share-modal";
+import { getSavedEntryKeysForProfile, isProfileSaved } from "@/features/saved/queries";
 import { RecentProfileTracker, SaveProfileButton } from "@/features/saved/save-profile-button";
 import { getCurrentAccount } from "@/features/vore-shell/queries";
 import { ProfileTabsClient } from "@/features/profiles/profile-tabs-client";
@@ -167,7 +167,9 @@ export default async function PublicProfilePage({
   const canEdit = !!viewer && viewer.id === profile.user_id;
   // Saving is a personal-account feature in the native app.
   const canSave = account?.account_type === "common";
-  const saved = canSave ? await isProfileSaved(profile.id) : false;
+  const [saved, savedEntryKeys] = canSave
+    ? await Promise.all([isProfileSaved(profile.id), getSavedEntryKeysForProfile(profile.slug)])
+    : [false, [] as string[]];
 
   return (
     <main className="page-shell">
@@ -187,7 +189,7 @@ export default async function PublicProfilePage({
           ) : null}
           {canSave ? (
             <div className="profile-native-actions">
-              <ShareProfileButton
+              <ShareButton
                 profileId={profile.id}
                 profileSlug={profile.slug}
                 profileName={profile.name}
@@ -256,6 +258,11 @@ export default async function PublicProfilePage({
           data={profile.data}
           about={about}
           initialTab={query.tab}
+          profileId={profile.id}
+          profileSlug={profile.slug}
+          profileName={profile.name}
+          canInteract={canSave}
+          savedEntryKeys={savedEntryKeys}
         />
       </section>
     </main>

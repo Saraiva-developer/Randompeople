@@ -17,14 +17,22 @@ function SendIcon() {
   );
 }
 
-export function ShareProfileButton({
+export function ShareButton({
   profileId,
   profileSlug,
-  profileName
+  profileName,
+  contentType = "profile",
+  contentUri = "",
+  subject,
+  className = "profile-top-circle profile-native-share"
 }: {
   profileId: string;
   profileSlug: string;
   profileName: string;
+  contentType?: "profile" | "photo" | "video" | "reel";
+  contentUri?: string;
+  subject?: string;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -86,8 +94,8 @@ export function ShareProfileButton({
       profileId,
       profileSlug,
       sourceProfileName: profileName,
-      contentType: "profile",
-      contentUri: ""
+      contentType,
+      contentUri
     });
     setSending(false);
     if (!result.ok) {
@@ -106,9 +114,9 @@ export function ShareProfileButton({
     <>
       <button
         type="button"
-        className="profile-top-circle profile-native-share"
-        aria-label="Partilhar perfil"
-        title="Partilhar perfil"
+        className={className}
+        aria-label={subject ? `Partilhar ${subject}` : "Partilhar perfil"}
+        title={subject ? `Partilhar ${subject}` : "Partilhar perfil"}
         onClick={() => setOpen(true)}
       >
         <SendIcon />
@@ -124,7 +132,7 @@ export function ShareProfileButton({
           >
             <div className="pnt-modal-header">
               <div className="pnt-modal-heading">
-                <h4 className="pnt-modal-title">Partilhar perfil</h4>
+                <h4 className="pnt-modal-title">{subject ? `Partilhar ${subject}` : "Partilhar perfil"}</h4>
                 <span className="pnt-modal-section">{profileName}</span>
               </div>
               <button

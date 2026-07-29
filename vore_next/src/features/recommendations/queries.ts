@@ -3,6 +3,7 @@ import { getSupabaseAdminClient, getSupabaseServerClient } from "@/lib/supabase"
 import { parseItemShareUri } from "@/features/recommendations/shared";
 import type {
   PermissionRequest,
+  ReactionKey,
   ShareConversation,
   ShareEntry
 } from "@/features/recommendations/shared";
@@ -54,7 +55,22 @@ export async function getShareConversations(): Promise<ShareConversation[]> {
   const otherIds = rows.map((row) =>
     row.sender_user_id === user.id ? row.receiver_user_id : row.sender_user_id
   );
-  const users = await resolveUsers(otherIds);
+  const [users, { data: reactionRows }] = await Promise.all([
+    resolveUsers(otherIds),
+    supabase
+      .from("recommendation_reactions")
+      .select("recommendation_id, reaction")
+      .eq("user_id", user.id)
+      .in(
+        "recommendation_id",
+        rows.map((row) => row.id)
+      )
+  ]);
+  const reactions = new Map(
+    ((reactionRows as Array<{ recommendation_id: number; reaction: string }> | null) || []).map(
+      (row) => [row.recommendation_id, row.reaction as ReactionKey]
+    )
+  );
 
   const grouped = new Map<string, ShareConversation>();
   rows.forEach((row) => {
@@ -71,7 +87,8 @@ export async function getShareConversations(): Promise<ShareConversation[]> {
       sourceProfileName: String(row.source_profile_name || ""),
       createdAt: row.created_at,
       expiresAt: row.expires_at,
-      item: parseItemShareUri(String(row.content_uri || ""))
+      item: parseItemShareUri(String(row.content_uri || "")),
+      myReaction: reactions.get(row.id) || null
     };
 
     const existing = grouped.get(otherId);
