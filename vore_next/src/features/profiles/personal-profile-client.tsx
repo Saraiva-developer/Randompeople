@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { SharesTab } from "@/features/recommendations/shares-tab";
+import type { PermissionRequest, ShareConversation } from "@/features/recommendations/shared";
 import type { ProfileRow } from "@/features/vore-shell/queries";
 import { getBadgeType, getCardDisplayData, resolveProfileFilter } from "@/features/vore-shell/display";
 
@@ -54,14 +56,18 @@ export function PersonalProfileClient({
   name,
   email,
   savedProfiles,
-  profiles
+  profiles,
+  conversations,
+  permissionRequests
 }: {
   name: string;
   email: string;
   savedProfiles: ProfileRow[];
   profiles: ProfileRow[];
+  conversations: ShareConversation[];
+  permissionRequests: PermissionRequest[];
 }) {
-  const [tab, setTab] = useState<"saved" | "recent" | "alerts">("saved");
+  const [tab, setTab] = useState<"shares" | "saved" | "recent" | "alerts">("saved");
   const [savedQuery, setSavedQuery] = useState("");
   const [savedLimit, setSavedLimit] = useState(PAGE_SIZE);
   const [recentIds, setRecentIds] = useState<string[]>([]);
@@ -137,23 +143,32 @@ export function PersonalProfileClient({
       <div className="pnt-tabs ppf-tabs">
         {(
           [
+            ["shares", "Partilhas"],
             ["saved", "Guardados"],
             ["recent", "Recentes"],
             ["alerts", "Sugestões"]
           ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            className={`pnt-tab${tab === key ? " is-active" : ""}`}
-            onClick={() => setTab(key)}
-          >
-            {label}
-          </button>
-        ))}
+        ).map(([key, label]) => {
+          const badge = key === "shares" ? permissionRequests.length : 0;
+          return (
+            <button
+              key={key}
+              type="button"
+              className={`pnt-tab${tab === key ? " is-active" : ""}`}
+              onClick={() => setTab(key)}
+            >
+              {label}
+              {badge ? <span className="ppf-tab-badge">{badge}</span> : null}
+            </button>
+          );
+        })}
       </div>
 
       <div className="pnt-panel">
+        {tab === "shares" ? (
+          <SharesTab conversations={conversations} requests={permissionRequests} />
+        ) : null}
+
         {tab === "saved" ? (
           !savedProfiles.length ? (
             <EmptyState

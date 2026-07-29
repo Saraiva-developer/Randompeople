@@ -8,6 +8,7 @@ import {
 } from "@/features/profiles/view";
 import { getCurrentUser } from "@/features/auth/session";
 import { getPublicProfileBySlug } from "@/features/profiles/queries";
+import { ShareProfileButton } from "@/features/recommendations/share-modal";
 import { isProfileSaved } from "@/features/saved/queries";
 import { RecentProfileTracker, SaveProfileButton } from "@/features/saved/save-profile-button";
 import { getCurrentAccount } from "@/features/vore-shell/queries";
@@ -185,7 +186,12 @@ export default async function PublicProfilePage({
             </Link>
           ) : null}
           {canSave ? (
-            <div className="profile-native-save-wrap">
+            <div className="profile-native-actions">
+              <ShareProfileButton
+                profileId={profile.id}
+                profileSlug={profile.slug}
+                profileName={profile.name}
+              />
               <SaveProfileButton profileId={profile.id} initialSaved={saved} />
             </div>
           ) : null}
